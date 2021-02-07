@@ -2,4 +2,4 @@
 
 export(qgh)
 import(magrittr)
-importFrom(stats,uniroot)
+importFrom(stats,qnorm)

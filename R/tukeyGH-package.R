@@ -13,7 +13,7 @@
 #'
 #' @import magrittr
 #'
-#' @importFrom stats uniroot
+#' @importFrom stats qnorm
 #'
 NULL
 
