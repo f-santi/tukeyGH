@@ -1,0 +1,20 @@
+
+citHeader("To cite package 'tukeyGH' in publications use:")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste('R package version', meta$Version)
+
+citEntry(entry = 'manual',
+  title       = paste('tukeyGH:', meta$Title),
+  author      = personList(person('F.', 'Santi'),
+                  person('M.', 'Bee'),
+                  person('L.', 'Trapin'),
+                  person('J.', 'Hambuckers')),
+  year = year,
+  note = vers,
+  textVersion =
+    paste('Santi, F., M. Bee, L. Trapin, J. Hambuckers (',
+      year, ') "tukeyGH: ', meta$Title, '". ',
+      vers, '.', sep = ''
+    )
+)
