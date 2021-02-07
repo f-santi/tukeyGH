@@ -1,0 +1,9 @@
+/inst/doc
+/man/*.Rd
+.DS_Store
+.Rapp.history
+.Rproj.user
+.RData
+.Rhistory
+/flavio/
+/data-raw/USvote2016.dta

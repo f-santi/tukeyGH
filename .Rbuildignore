@@ -1,0 +1,10 @@
+^.git$
+^.gitignore$
+^README.Rmd$
+^cran-comments.md$
+^.DS_Store$
+^.Rapp.history$
+^.*\.Rproj$
+^\.Rproj\.user$
+^data-raw$
+^flavio$
