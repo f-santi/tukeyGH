@@ -1,6 +1,6 @@
 Package: tukeyGH
 Type: Package
-Title: What the package does (short line)
+Title: Tukey's g-and-h probability distribution
 Version: 0.0.0
 Date: 2021-02-07
 Authors@R: c(
@@ -19,7 +19,9 @@ Author: Flavio Santi [cre, aut] (<https://orcid.org/0000-0002-2014-1981>),
 Maintainer: Flavio Santi <flavio.santi@univr.it>
 URL: https://www.flaviosanti.it/software/plot3logit
 BugReports: https://github.com/f-santi/plot3logit/issues
-Description: More about what it does (maybe more than one line)
+Description: It provides distribution, density and quantile functions of the
+    Tukey's g-and-h probability distribution, as well as functions for random
+    number generation, parameter fitting and testing.
 Depends: R (>= 4.0)
 Imports: magrittr (>= 2.0.0)
 Suggests: 
