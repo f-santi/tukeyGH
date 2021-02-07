@@ -22,7 +22,8 @@ BugReports: https://github.com/f-santi/plot3logit/issues
 Description: More about what it does (maybe more than one line)
 Depends: R (>= 4.0)
 Imports: magrittr (>= 2.0.0)
-Suggests: testthat
+Suggests: 
+    testthat (>= 3.0.0)
 License: GPL (>=3)
 LazyData: true
 NeedsCompilation: no
@@ -32,3 +33,4 @@ RoxygenNote: 7.1.1
 Repository: CRAN
 VignetteBuilder: knitr
 RdMacros: Rdpack, lifecycle
+Config/testthat/edition: 3
