@@ -83,7 +83,7 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
   # normal
-  depo <- rnorm(n[1], 0, 1)
+  depo <- stats::rnorm(n[1], 0, 1)
   
   # h
   out <- exp(h[1] * depo^2 / 2)
