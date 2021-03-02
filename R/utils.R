@@ -10,3 +10,14 @@ is_GHvalid <- function(a, b, g, h) {
 }
 
 
+
+# Randomly generates parameters
+gen_GHvalid <- function(n) {
+  data.frame(
+    a = rnorm(n),
+    b = rnorm(n),
+    g = rnorm(n),
+    h = rchisq(n, 2)
+  )
+}
+

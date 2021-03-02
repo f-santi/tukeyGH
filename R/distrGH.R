@@ -6,12 +6,15 @@
 #' 
 #' @param p vector of probabilities.
 #' @param g skewness parameter.
-#' @param h havy-taildness parameter.
+#' @param h heavy-taildness parameter.
 #' @param a location parameter.
 #' @param b scale parameter.
+#' @param ... arguments passed to `uniroot`.
 #' 
 #' @references
 #' \insertAllCited{}
+#' 
+#' @name gh
 #' 
 #' @export
 qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
@@ -41,4 +44,32 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
   return(out)
 }
 
+
+
+#' @rdname gh
+#' 
+#' @export
+pgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
+  # vectorisation
+  xdf <- data.frame(x = x, a = a, b = b, g = g, h = h, p = NA)
+  rm(x, a, b, g, h)
+  
+  # function to be zeroed
+  toroot <- function(p, a, b, g, h, x) { return(qgh(p, a, b, g, h) - x) }
+  
+  # computation
+  seq_len(nrow(xdf)) %>%
+    lapply(function(j) {
+      uniroot(
+        f = toroot, interval = c(0,1),
+        a = xdf$a[j], b = xdf$b[j], g = xdf$g[j], h = xdf$h[j], x = xdf$x[j],
+        ...
+      )$root
+    }) %>%
+    unlist() %>%
+    return()
+}
 
