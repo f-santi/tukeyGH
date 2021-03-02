@@ -15,6 +15,9 @@
 #' 
 #' @export
 qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
   # vectorisation
   x <- data.frame(p = p, a = a, b = b, g = g, h = h)
   rm(p, a, b, g, h)
