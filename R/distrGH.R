@@ -73,3 +73,28 @@ pgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
     return()
 }
 
+
+
+#' @rdname gh
+#' 
+#' @export
+rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
+  # normal
+  depo <- rnorm(n[1], 0, 1)
+  
+  # h
+  out <- exp(h[1] * depo^2 / 2)
+  
+  # g
+  if (g[1] != 0) { depo <- (exp(g[1] * depo) - 1) / g[1] }
+  
+  # location and scale
+  out <- a[1] + b[1] * depo * out
+  
+  # output
+  return(out)
+}
+
