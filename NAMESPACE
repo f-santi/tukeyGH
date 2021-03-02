@@ -2,5 +2,7 @@
 
 export(pgh)
 export(qgh)
+export(rgh)
 import(magrittr)
 importFrom(stats,qnorm)
+importFrom(stats,uniroot)
