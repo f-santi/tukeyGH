@@ -119,3 +119,43 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   return(out)
 }
 
+
+
+#' @rdname gh
+#' @export
+infgh <- function(a = 0, b = 1, g = 0, h = 1) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
+  # vectorisation
+  x <- data.frame(a = a, b = b, g = g, h = h, inf = -Inf)
+  rm(a, b, g, h)
+  
+  # computation
+  pos <- which((x$g > 0) & (x$h == 0))
+  x$inf[pos] <- with(x, a[pos] - b[pos] / g[pos])
+  
+  # output
+  return(x$inf)
+}
+
+
+
+#' @rdname gh
+#' @export
+supgh <- function(a = 0, b = 1, g = 0, h = 1) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
+  # vectorisation
+  x <- data.frame(a = a, b = b, g = g, h = h, sup = Inf)
+  rm(a, b, g, h)
+  
+  # computation
+  pos <- which((x$g < 0) & (x$h == 0))
+  x$sup[pos] <- with(x, a[pos] - b[pos] / g[pos])
+  
+  # output
+  return(x$sup)
+}
+
