@@ -32,4 +32,12 @@ test_that("qgh works", {
   depo <- gen_GHvalid(100)
   depo$p <- 0.5
   expect_equal(do.call('qgh', depo), depo$a)
+  
+  # Cfr. with Gaussian
+  depo <- gen_GHvalid(100, g = 0, h = 0)
+  depox <- runif(100)
+  expect_equal(
+    with(depo, qgh(depox, a, b, g, h)),
+    with(depo, qnorm(depox, a, b))
+  )
 })
