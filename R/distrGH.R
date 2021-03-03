@@ -44,7 +44,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
   
   # vectorisation
   xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA)
-  rm(x, a, b, g, h)
+  rm(q, a, b, g, h)
   
   # function to be zeroed
   toroot <- function(p, a, b, g, h, x) { return(qgh(p, a, b, g, h) - x) }
