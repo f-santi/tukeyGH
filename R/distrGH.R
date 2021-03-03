@@ -19,7 +19,7 @@
 #' @references
 #' \insertAllCited{}
 #' 
-#' @name gh
+#' @name distr-gh
 #' 
 #' @export
 dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
@@ -36,7 +36,7 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
 
 
 
-#' @rdname gh
+#' @rdname distr-gh
 #' @export
 pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
   # check the params
@@ -64,7 +64,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
 
 
 
-#' @rdname gh
+#' @rdname distr-gh
 #' @export
 qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
   # check the params
@@ -97,7 +97,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
 
 
 
-#' @rdname gh
+#' @rdname distr-gh
 #' @export
 rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   # check the params
@@ -142,7 +142,7 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
 
 
 
-#' @rdname gh
+#' @rdname distr-gh
 #' @export
 infgh <- function(a = 0, b = 1, g = 0, h = 1) {
   # check the params
@@ -162,7 +162,7 @@ infgh <- function(a = 0, b = 1, g = 0, h = 1) {
 
 
 
-#' @rdname gh
+#' @rdname distr-gh
 #' @export
 supgh <- function(a = 0, b = 1, g = 0, h = 1) {
   # check the params

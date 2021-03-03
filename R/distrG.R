@@ -7,13 +7,13 @@
 #' vectorized with respect to all arguments, with the exception of `rg`. The
 #' functions are wrappers of the g-and-h family with `h = 0`.
 #' 
-#' @inheritParams gh
+#' @inheritParams distr-gh
 #' @param x,q vector of quantiles.
 #' 
 #' @references
 #' \insertAllCited{}
 #' 
-#' @name g
+#' @name distr-g
 #' 
 #' @export
 dg <- function(x, a = 0, b = 1, g = 0) {
@@ -22,7 +22,7 @@ dg <- function(x, a = 0, b = 1, g = 0) {
 
 
 
-#' @rdname g
+#' @rdname distr-g
 #' @export
 pg <- function(q, a = 0, b = 1, g = 0, ...) {
   pgh(q = q, a = a, b = b, g = g, h = 0)
@@ -30,7 +30,7 @@ pg <- function(q, a = 0, b = 1, g = 0, ...) {
 
 
 
-#' @rdname g
+#' @rdname distr-g
 #' @export
 qg <- function(p, a = 0, b = 1, g = 0) {
   qgh(p = p, a = a, b = b, g = g, h = 0)
@@ -38,7 +38,7 @@ qg <- function(p, a = 0, b = 1, g = 0) {
 
 
 
-#' @rdname g
+#' @rdname distr-g
 #' @export
 rg <- function(n, a = 0, b = 1, g = 0) {
   rgh(n = n, a = a, b = b, g = g, h = 0)
@@ -46,7 +46,7 @@ rg <- function(n, a = 0, b = 1, g = 0) {
 
 
 
-#' @rdname g
+#' @rdname distr-g
 #' @export
 infg <- function(a = 0, b = 1, g = 0) {
   infgh(a = a, b = b, g = g, h = 0)
@@ -54,7 +54,7 @@ infg <- function(a = 0, b = 1, g = 0) {
 
 
 
-#' @rdname g
+#' @rdname distr-g
 #' @export
 supg <- function(a = 0, b = 1, g = 0) {
   infgh(a = a, b = b, g = g, h = 0)
