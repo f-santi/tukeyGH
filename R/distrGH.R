@@ -1,11 +1,11 @@
 
-#' The Tukey g-and-h distribution
+#' The Tukey's g-and-h distribution
 #' 
 #' Density (`dgh`), distribution function (`pgh`), quantile function (`qgh`),
 #' random generation (`rgh`), and bounds of the support (`infgh` and `supgh`)
-#' of the Tukey g-and-h distribution \insertCite{tukey1977;textual}{tukeyGH}.
-#' All functions are vectorized with respect to all arguments, with the
-#' exception of `rgh`.
+#' of the Tukey's g-and-h distribution \insertCite{tukey1977}{tukeyGH}. All
+#' functions are vectorized with respect to all arguments, with the exception
+#' of `rgh`.
 #' 
 #' @param p vector of probabilities.
 #' @param g skewness parameter(s).
