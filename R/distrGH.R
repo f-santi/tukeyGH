@@ -19,6 +19,22 @@
 #' @name gh
 #' 
 #' @export
+dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
+  # check the params
+  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  
+  # compute the new x
+  x %>%
+    pgh(a = a, b = b, g = g, h = h) %>%
+    qnorm() %>%
+    { stats::dnorm(.) / abs(deriv_Tgh(., b = b, g = g, h = h)) } %>%
+    return()
+}
+
+
+
+#' @rdname gh
+#' @export
 pgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
@@ -46,7 +62,6 @@ pgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
 
 
 #' @rdname gh
-#' 
 #' @export
 qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
   # check the params
