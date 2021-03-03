@@ -75,7 +75,9 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
   z <- qnorm(x$p, 0, 1)
   
   # h
-  out <- exp(x$h * z^2 / 2)
+  out <- rep(1, nrow(x))
+  pos <- which(x$h != 0)
+  out[pos] <- with(x, exp(h[pos] * z[pos]^2 / 2))
   
   # g
   pos <- which(x$g == 0)
