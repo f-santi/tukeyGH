@@ -16,13 +16,13 @@ is_GHvalid <- function(a, b, g, h) {
 
 
 # Randomly generates parameters
-gen_GHvalid <- function(n) {
-  data.frame(
-    a = stats::rnorm(n),
-    b = stats::rlnorm(n),
-    g = stats::rnorm(n),
-    h = stats::rchisq(n, 1)
-  )
+gen_GHvalid <- function(n, a, b, g, h) {
+  if (missing(a)) { a <- stats::rnorm(n) }
+  if (missing(b)) { b <- stats::rlnorm(n) }
+  if (missing(g)) { g <- stats::rnorm(n) }
+  if (missing(h)) { h <- stats::rchisq(n, 1) }
+  
+  data.frame(a = a, b = b, g = g, h = h)
 }
 
 
