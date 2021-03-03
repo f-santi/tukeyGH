@@ -2,6 +2,7 @@
 
 export(dg)
 export(dgh)
+export(gh)
 export(infg)
 export(infgh)
 export(pg)
