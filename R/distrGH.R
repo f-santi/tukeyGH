@@ -30,7 +30,7 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
   x %>%
     pgh(a = a, b = b, g = g, h = h) %>%
     qnorm() %>%
-    { stats::dnorm(.) / abs(deriv_Tgh(., b = b, g = g, h = h)) } %>%
+    { stats::dnorm(.) / deriv_Tgh(., b = b, g = g, h = h) } %>%
     return()
 }
 
