@@ -78,14 +78,16 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
 
 
 #' @rdname gh
-#' 
 #' @export
 rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
+  # set the number of replications
+  if (length(n) > 1) { n <- length(n) }
+  
   # normal
-  depo <- stats::rnorm(n[1], 0, 1)
+  depo <- stats::rnorm(n, 0, 1)
   
   # h
   out <- exp(h[1] * depo^2 / 2)
