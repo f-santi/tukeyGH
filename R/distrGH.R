@@ -106,6 +106,24 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   # set the number of replications
   if (length(n) > 1) { n <- length(n) }
   
+  # check and set the parameters
+  if (length(a) > 1) {
+    a <- a[1]
+    warning('length(a) > 1. Only the first element will be considered')
+  }
+  if (length(b) > 1) {
+    b <- b[1]
+    warning('length(b) > 1. Only the first element will be considered')
+  }
+  if (length(g) > 1) {
+    g <- g[1]
+    warning('length(g) > 1. Only the first element will be considered')
+  }
+  if (length(h) > 1) {
+    h <- h[1]
+    warning('length(h) > 1. Only the first element will be considered')
+  }
+  
   # normal
   depo <- stats::rnorm(n, 0, 1)
   
