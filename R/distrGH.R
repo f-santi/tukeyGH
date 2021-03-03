@@ -13,7 +13,7 @@
 #' @param a location parameter(s).
 #' @param b scale parameter(s).
 #' @param ... arguments passed to `uniroot`.
-#' @param x vector of quantiles.
+#' @param x,q vector of quantiles.
 #' @inheritParams stats::rnorm
 #' 
 #' @references
@@ -38,12 +38,12 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
 
 #' @rdname gh
 #' @export
-pgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
+pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
   # vectorisation
-  xdf <- data.frame(x = x, a = a, b = b, g = g, h = h, p = NA)
+  xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA)
   rm(x, a, b, g, h)
   
   # function to be zeroed
