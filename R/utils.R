@@ -2,6 +2,10 @@
 # Check the validity of parameters
 is_GHvalid <- function(a, b, g, h) {
 
+  if (!missing(b)) {
+    if (any(b <= 0)) { stop('Parameter "b" must be positive') }
+  }
+  
   if (!missing(h)) {
     if (any(h < 0)) { stop('Parameter "h" must be non-negative') }
   }
@@ -15,7 +19,7 @@ is_GHvalid <- function(a, b, g, h) {
 gen_GHvalid <- function(n) {
   data.frame(
     a = stats::rnorm(n),
-    b = stats::rnorm(n),
+    b = stats::rlnorm(n),
     g = stats::rnorm(n),
     h = stats::rchisq(n, 1)
   )
