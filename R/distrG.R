@@ -16,8 +16,8 @@
 #' @name distr-g
 #' 
 #' @export
-dg <- function(x, a = 0, b = 1, g = 0) {
-  dgh(x = x, a = a, b = b, g = g, h = 0)
+dg <- function(x, a = 0, b = 1, g = 0, ...) {
+  dgh(x = x, a = a, b = b, g = g, h = 0, ...)
 }
 
 
@@ -25,7 +25,7 @@ dg <- function(x, a = 0, b = 1, g = 0) {
 #' @rdname distr-g
 #' @export
 pg <- function(q, a = 0, b = 1, g = 0, ...) {
-  pgh(q = q, a = a, b = b, g = g, h = 0)
+  pgh(q = q, a = a, b = b, g = g, h = 0, ...)
 }
 
 

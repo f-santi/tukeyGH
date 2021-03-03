@@ -22,13 +22,13 @@
 #' @name distr-gh
 #' 
 #' @export
-dgh <- function(x, a = 0, b = 1, g = 0, h = 1) {
+dgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
   # compute the new x
   x %>%
-    pgh(a = a, b = b, g = g, h = h) %>%
+    pgh(a = a, b = b, g = g, h = h, ...) %>%
     qnorm() %>%
     { stats::dnorm(.) / deriv_Tgh(., b = b, g = g, h = h) } %>%
     return()
