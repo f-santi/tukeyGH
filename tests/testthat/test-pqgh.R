@@ -1,5 +1,5 @@
 
-test_that("quantile and distribution function works consistently", {
+test_that("qgh and pgh works consistently", {
   # PQP 1
   depo <- gen_GHvalid(100)
   p0 <- runif(100)

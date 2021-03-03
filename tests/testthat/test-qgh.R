@@ -1,5 +1,5 @@
 
-test_that("quantile function works", {
+test_that("qgh works", {
   # Minimum 1
   depo <- gen_GHvalid(100, g = 0, h = 0)
   expect_equal(do.call('qgh', c(depo, list(p = 0))), do.call('infgh', depo))
