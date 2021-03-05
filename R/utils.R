@@ -50,6 +50,14 @@ deriv_Tgh <- function(x, b, g, h) {
 
 
 
+# log-likelihood function of gh
+loglikGH <- function(theta, x) {
+  dgh(x, a = theta[1], b = theta[2], g = theta[3], h = theta[4], log = TRUE) %>%
+    sum() %>%
+    return()
+} 
+
+
 # Instantiate a new object of S3 class "ghfit"
 new_ghfit <- function() {
   list(
@@ -60,7 +68,9 @@ new_ghfit <- function() {
     sd = NULL,
     vcov = NULL,
     n = 0,
-    x = NULL
+    x = NULL,
+    estimator = NULL,
+    time = NULL
   ) %>%
     structure(class = 'ghfit') %>%
     return()
