@@ -4,13 +4,23 @@
 #' Density (`dg`), distribution function (`pg`), quantile function (`qg`),
 #' random generation (`rg`), and bounds of the support (`infg` and `supg`) of
 #' the g distribution \insertCite{tukey1977}{tukeyGH}. All functions with the
-#' exception of `rgh` are vectorized with respect to all  arguments on the g
+#' exception of `rg` are vectorized with respect to all  arguments on the g
 #' distribution (`x`, `q`, `p`, `a`, `b`, `g`). The functions are wrappers of
 #' the g-and-h family with `h = 0`.
 #' 
 #' @inheritParams distr-gh
 #' @param x,q vector of quantiles.
 #' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
+#' 
+#' @return
+#' `dg` gives the density, `pg` gives the distribution function, `qg` gives the
+#' quantile function, and `rg` generates random numbers.
+#' 
+#' The length of the result is determined by `n` for `rg`, and is the maximum
+#' of the lengths of the numerical arguments for the other functions.
+#' 
+#' The numerical arguments other than `n` are recycled to the length of the
+#' result. Only the first elements of the logical arguments are used.
 #' 
 #' @references
 #' \insertAllCited{}

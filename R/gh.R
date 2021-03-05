@@ -1,10 +1,19 @@
 
 #' Fit the Tukey's g-and-h distribution
 #' 
-#' Fit...
+#' Fit the Tukey's g-and-h distribution on a dataset through various estimation
+#' methods: `"quantile"` \insertCite{hoaglin1985}{tukeyGH}.
 #' 
 #' @param x data.
 #' @param method estimation method.
+#' 
+#' @return
+#' Object of class `ghfit`. Useful methods include:
+#' * [coef()] point estimates of parameters
+#' * [print()] short information about the object
+#' 
+#' @references
+#' \insertAllCited{}
 #' 
 #' @export
 gh <- function(x, method = c("quantile", "iinference", "mle")) {
@@ -67,7 +76,6 @@ gh_hoaglin1985 <- function(x) {
 
 
 
-#' @rdname gh
 #' @export
 print.ghfit <- function(x, ...) {
   cat('\nCall:\n')
@@ -81,7 +89,6 @@ print.ghfit <- function(x, ...) {
 
 
 
-#' @rdname gh
 #' @export
 coef.ghfit <- function(object, ...) { object$estimate }
 

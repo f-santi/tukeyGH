@@ -17,6 +17,16 @@
 #' @param x,q vector of quantiles.
 #' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
 #' 
+#' @return
+#' `dgh` gives the density, `pgh` gives the distribution function, `qgh` gives
+#' the quantile function, and `rgh` generates random numbers.
+#' 
+#' The length of the result is determined by `n` for `rgh`, and is the maximum
+#' of the lengths of the numerical arguments for the other functions.
+#' 
+#' The numerical arguments other than `n` are recycled to the length of the
+#' result. Only the first elements of the logical arguments are used.
+#' 
 #' @references
 #' \insertAllCited{}
 #' 
