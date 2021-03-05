@@ -6,4 +6,7 @@
 .RData
 .Rhistory
 /flavio/
-/data-raw/USvote2016.dta
+/data-raw/BDSF.txt
+/data-raw/CPBP2014.txt
+/data-raw/EDPM2014.txt
+/data-raw/EPWS2014.txt
