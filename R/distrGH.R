@@ -32,7 +32,7 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1, log = FALSE, ...) {
     pgh(a = a, b = b, g = g, h = h, ...) %>%
     qnorm() %>%
     { stats::dnorm(.) / deriv_Tgh(., b = b, g = g, h = h) } %>%
-    { `if`(log == TRUE, log(.), .) } %>%
+    { `if`(log[1] == TRUE, log(.), .) } %>%
     return()
 }
 
@@ -63,8 +63,8 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
       )$root
     }) %>%
     unlist() %>%
-    { `if`(lower.tail == TRUE, ., 1 - .) } %>%
-    { `if`(log.p == TRUE, log(.), .) } %>%
+    { `if`(lower.tail[1] == TRUE, ., 1 - .) } %>%
+    { `if`(log.p[1] == TRUE, log(.), .) } %>%
     return()
 }
 
@@ -83,7 +83,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   rm(p, a, b, g, h)
   
   # normal
-  z <- qnorm(x$p, 0, 1, lower.tail = lower.tail, log.p = log.p)
+  z <- qnorm(x$p, 0, 1, lower.tail = lower.tail[1], log.p = log.p[1])
   
   # h
   out <- rep(1, nrow(x))
