@@ -34,8 +34,35 @@ gh_mle <- function(x) {
 
 
 
-gh_quantile <- function(x) {
-  stop('to be implemented...')
+gh_hoaglin1985 <- function(x) {
+  out <- new_ghfit()
+  
+  a <- median(x)
+  
+  # Estimate g
+  p <- c(0.005,0.01,seq(0.025,0.475,0.025))
+  z <- qnorm(p)
+  # Add 1e-5 to prevent UHS and LHS to become zero as it creates problem in the log.
+  UHS <- quantile(x,1-p) - a + 0.00001
+  LHS <- a - quantile(x,p) + 0.00001
+  g <- (-1/z) * log(UHS/LHS)
+  g <- median(g)
+  
+  # Regression
+  k <- log((UHS*g)/(exp(-g*z)-1))
+  kk <- (z^2/2)
+  reg <- lm(k ~ kk)
+  
+  # prepare output
+  out %<>%
+    modifyList(list(
+      distr = 'g-and-h',
+      method = 'quantile'
+    ))
+  out$estimate[1:4] <- c(a, exp(reg$coef[1]), g, reg$coef[2])
+  
+  # output
+  return(out)
 }
 
 
