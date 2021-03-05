@@ -9,8 +9,8 @@
 #' 
 #' @return
 #' Object of class `ghfit`. Useful methods include:
-#' * [coef()] point estimates of parameters
-#' * [print()] short information about the object
+#' * `coef()` point estimates of parameters
+#' * `print()` short information about the object
 #' 
 #' @references
 #' \insertAllCited{}
