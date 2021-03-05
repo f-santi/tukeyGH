@@ -92,7 +92,7 @@ gh_hoaglin1985 <- function(x) {
   
   # prepare the output
   out$distr <- 'g-and-h'
-  out$method < - 'quantile'
+  out$method <- 'quantile'
   out$estimate['a'] <- a
   out$estimate['b'] <- exp(reg$coef[1])
   out$estimate['g'] <- g
