@@ -4,9 +4,10 @@
 #' Density (`dgh`), distribution function (`pgh`), quantile function (`qgh`),
 #' random generation (`rgh`), and bounds of the support (`infgh` and `supgh`)
 #' of the Tukey's g-and-h distribution \insertCite{tukey1977}{tukeyGH}. All
-#' functions are vectorized with respect to all arguments, with the exception
-#' of `rgh`.
+#' functions with the exception of `rgh` are vectorized with respect to all 
+#' arguments on the Tukey's distribution (`x`, `q`, `p`, `a`, `b`, `g`, `h`).
 #' 
+#' @inheritParams stats::rnorm
 #' @param p vector of probabilities.
 #' @param g skewness parameter(s).
 #' @param h heavy-taildness parameter(s).
@@ -14,7 +15,7 @@
 #' @param b scale parameter(s).
 #' @param ... arguments passed to `uniroot`.
 #' @param x,q vector of quantiles.
-#' @inheritParams stats::rnorm
+#' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
 #' 
 #' @references
 #' \insertAllCited{}
@@ -22,7 +23,7 @@
 #' @name distr-gh
 #' 
 #' @export
-dgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
+dgh <- function(x, a = 0, b = 1, g = 0, h = 1, log = FALSE, ...) {
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
@@ -31,6 +32,7 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
     pgh(a = a, b = b, g = g, h = h, ...) %>%
     qnorm() %>%
     { stats::dnorm(.) / deriv_Tgh(., b = b, g = g, h = h) } %>%
+    { `if`(log == TRUE, log(.), .) } %>%
     return()
 }
 
@@ -38,7 +40,9 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1, ...) {
 
 #' @rdname distr-gh
 #' @export
-pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
+pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
+  log.p = FALSE, ...) {
+  
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
@@ -59,6 +63,8 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
       )$root
     }) %>%
     unlist() %>%
+    { `if`(lower.tail == TRUE, ., 1 - .) } %>%
+    { `if`(log.p == TRUE, log(.), .) } %>%
     return()
 }
 
@@ -66,7 +72,9 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, ...) {
 
 #' @rdname distr-gh
 #' @export
-qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
+qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
+  log.p = FALSE) {
+  
   # check the params
   if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
   
@@ -75,7 +83,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1) {
   rm(p, a, b, g, h)
   
   # normal
-  z <- qnorm(x$p, 0, 1)
+  z <- qnorm(x$p, 0, 1, lower.tail = lower.tail, log.p = log.p)
   
   # h
   out <- rep(1, nrow(x))
