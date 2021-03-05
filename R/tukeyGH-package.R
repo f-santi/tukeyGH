@@ -13,7 +13,7 @@
 #'
 #' @import magrittr
 #'
-#' @importFrom stats qnorm uniroot
+#' @importFrom stats median qnorm quantile uniroot
 #'
 NULL
 
