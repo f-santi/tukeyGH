@@ -9,7 +9,7 @@
 #'
 #' @import magrittr
 #'
-#' @importFrom stats median qnorm quantile uniroot
+#' @importFrom stats median optim qnorm quantile uniroot
 #'
 "_PACKAGE"
 
