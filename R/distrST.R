@@ -1,6 +1,6 @@
 
 # Density of the skewed-t distribution - Fernandez and Steel (1998)
-dst <- function (x, df = 10, a = 0, b = 1, skew = 1, log = FALSE) {
+dst <- function (x, a = 0, b = 1, skew = 1, df = 10, log = FALSE) {
   if (log) {
     lnumerator <- log(2) - log(skew + 1 / skew)
     ldenom1 <- lbeta(0.5, df / 2) + log(b) + log(df) / 2
@@ -19,9 +19,9 @@ dst <- function (x, df = 10, a = 0, b = 1, skew = 1, log = FALSE) {
 
 
 # log-likelihood of the skew-t distribution of Fernandez and Steel (1998)
-# theta = c(df, skew)
+# theta = c(a, b, skew, df)
 loglikST <- function(theta, x) {
-  dst(x, df = theta[1], a = 0, b = 1, skew = theta[2], log = TRUE) %>%
+  dst(x, a = theta[1], b = theta[2], skew = theta[3], df = theta[4], log = TRUE) %>%
     sum() %>%
     return()
 }
