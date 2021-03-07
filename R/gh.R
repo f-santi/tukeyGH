@@ -34,7 +34,42 @@ gh <- function(x, method = c("quantile", "iinference", "mle")) {
 
 
 gh_iinference <- function(x) {
-  stop('to be implemented...')
+  # initialtisation
+  out <- new_ghfit()
+  
+  # set starting values via the quantile method
+  gh_hoaglin1985(x) %>%
+    use_series('estimate') %>%
+    pmax(c(-Inf, -Inf, 0, 1e-50)) -> init
+  
+  # computing pseudo MLes
+  optim(
+    par = c(0.1, 0.51),
+    fn = function(theta, x) { loglikST(c(init[1:2], theta), x) },
+    x = x,
+    control = list(fnscale = -1)
+  ) -> depoH
+  
+  # W
+  W <- XiBoot(x, 20, c(0.1, 0.5)) %>% solve()
+  
+  minqa::bobyqa(
+    par = init[3:4],
+    fn = iinferenceGH_ST,
+    lower = c(0, 1e-50),
+    upper = c(Inf, Inf),
+    control = list(iprint = 0, maxfun = 600),
+    parmt = depoH$par, W = W, nsim = 5000
+  ) -> depo
+  
+  # prepare the output
+  out$distr <- 'g-and-h'
+  out$method <- 'iinference'
+  out$estimate[1:4] <- c(init[1:2], depo$par)
+  out$estimator <- depo
+  
+  # output
+  return(out)
 }
 
 
@@ -63,7 +98,7 @@ gh_mle <- function(x) {
   out$distr <- 'g-and-h'
   out$method <- 'mle'
   out$estimate[1:4] <- depo$par
-  out$optim <- depo
+  out$estimator <- depo
   
   # output
   return(out)
