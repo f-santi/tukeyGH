@@ -160,13 +160,13 @@ coef.ghfit <- function(object, ...) { object$estimate }
 
 #' @export
 summary.ghfit <- function(object, ...) {
-  cat('\n', toupper(object$distr), ' distribution\n', sep = '')
+  cat('\nFitted', toupper(object$distr), 'distribution\n')
   cat('\nCall:\n')
   print(object$call)
-  cat('\nPoint estimates:')
+  cat('\nParameters:\n\n')
   depo <- as.matrix(object$estimate)
-  rownames(depo) %<>% paste0('  :')
-  colnames(depo) <- ''
+  colnames(depo) <- 'est.'
+  rownames(depo) %<>% paste0('  ')
   print(signif(depo, 4))
   
   cat('\n',
