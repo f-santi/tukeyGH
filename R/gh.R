@@ -11,6 +11,7 @@
 #' Object of class `ghfit`. Useful methods include:
 #' * `coef()` point estimates of parameters
 #' * `print()` short information about the object
+#' * `summary()` summary information about the estimation process
 #' 
 #' @references
 #' \insertAllCited{}
@@ -154,4 +155,27 @@ print.ghfit <- function(x, ...) {
 
 #' @export
 coef.ghfit <- function(object, ...) { object$estimate }
+
+
+
+#' @export
+summary.ghfit <- function(object, ...) {
+  cat('\n', toupper(object$distr), ' distribution\n', sep = '')
+  cat('\nCall:\n')
+  print(object$call)
+  cat('\nPoint estimates:')
+  depo <- as.matrix(object$estimate)
+  rownames(depo) %<>% paste0('  :')
+  colnames(depo) <- ''
+  print(signif(depo, 4))
+  
+  cat('\n',
+    'Estimation method: ', object$method, '\n',
+    'Estimation time: ', signif(object$time, 3), ' ', units(object$time), '\n',
+    sep = ''
+  )
+  
+  # output
+  invisible(object)
+}
 

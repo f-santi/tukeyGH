@@ -2,6 +2,7 @@
 
 S3method(coef,ghfit)
 S3method(print,ghfit)
+S3method(summary,ghfit)
 export(dg)
 export(dgh)
 export(gh)
