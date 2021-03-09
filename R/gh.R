@@ -6,6 +6,7 @@
 #' 
 #' @param x data.
 #' @param method estimation method.
+#' @param mixed whether...
 #' 
 #' @return
 #' Object of class `ghfit`. Useful methods include:
@@ -17,14 +18,22 @@
 #' \insertAllCited{}
 #' 
 #' @export
-gh <- function(x, method = c("quantile", "iinference", "mle")) {
+gh <- function(x, method = c("quantile", "iinference", "mle"), mixed = TRUE) {
   t0 <- Sys.time()
   
-  switch(match.arg(method),
-    iinference = gh_iinference(x),
-    mle        = gh_mle(x),
-    quantile   = gh_hoaglin1985(x)
-  ) -> out
+  if (mixed == TRUE) {
+    switch(match.arg(method),
+      iinference = gh_iinference(x),
+      mle        = gh_mle2(x),
+      quantile   = gh_hoaglin1985(x)
+    ) -> out  
+  } else {
+    switch(match.arg(method),
+      iinference = gh_iinference(x),
+      mle        = gh_mle4(x),
+      quantile   = gh_hoaglin1985(x)
+    ) -> out
+  }
   
   out$call <- match.call()
   out$time <- Sys.time() - t0
@@ -75,14 +84,44 @@ gh_iinference <- function(x) {
 
 
 
-gh_mle <- function(x) {
-  # initialtisation
+gh_mle2 <- function(x) {
+  # Initialtisation
   out <- new_ghfit()
   
-  # set starting values via the quantile method
+  # Set the starting values via the quantile method
   gh_hoaglin1985(x) %>%
     use_series('estimate') %>%
-    pmax(-Inf, -Inf, 1e-4, 1e-4) %>%
+    unname -> init
+  
+  # MLE
+  optim(
+    par = init[3:4],
+    fn = function(theta, x) { loglikGH(c(0, 1, theta), x) },
+    x = x,
+    method = 'L-BFGS-B',
+    lower = c(-Inf, 0),
+    control = list(fnscale = -1)
+  ) -> depo
+  
+  # Prepare the output
+  out$distr <- 'g-and-h'
+  out$method <- 'mle'
+  out$estimate[1:4] <- c(init[1:2], depo$par)
+  out$estimator <- depo
+  
+  # output
+  return(out)
+}
+
+
+
+gh_mle4 <- function(x) {
+  # Initialtisation
+  out <- new_ghfit()
+  
+  # Set the starting values via the quantile method
+  gh_hoaglin1985(x) %>%
+    use_series('estimate') %>%
     unname -> init
   
   # MLE
@@ -95,7 +134,7 @@ gh_mle <- function(x) {
     control = list(fnscale = -1)
   ) -> depo
   
-  # prepare the output
+  # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'mle'
   out$estimate[1:4] <- depo$par
