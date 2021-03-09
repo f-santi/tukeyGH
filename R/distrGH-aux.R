@@ -28,21 +28,15 @@ gen_GHvalid <- function(n, a, b, g, h) {
 
 
 # Derivative of gh transformation
+# NOTE: all arguments must be valid and vectorised
 deriv_Tgh <- function(x, b, g, h) {
-  # check the params
-  if (!is_GHvalid(b = b, g = g, h = h)) { stop('Bad parameter value') }
-  
-  # vectorisation
-  xdf <- data.frame(x = x, b = b, g = g, h = h, p = NA)
-  rm(x, b, g, h)
-  
   # computation
-  out <- xdf$b * exp(xdf$h * xdf$x^2 / 2)
-  pos <- which(xdf$g == 0)
-  out[pos] <- (1 + xdf$h[pos] * xdf$x[pos]^2) * out[pos]
-  pos <- which(xdf$g != 0)
-  out[pos] <- with(xdf, ((g[pos] + h[pos] * x[pos]) * exp(g[pos] * x[pos]) -
-    h[pos] * x[pos]) / g[pos]) * out[pos]
+  out <- b * exp(h * x^2 / 2)
+  pos <- which(g == 0)
+  out[pos] <- (1 + h[pos] * x[pos]^2) * out[pos]
+  pos <- which(g != 0)
+  out[pos] <- (g[pos] + h[pos] * x[pos]) * exp(g[pos] * x[pos]) -
+    h[pos] * x[pos] / g[pos] * out[pos]
   
   # output
   return(out)
