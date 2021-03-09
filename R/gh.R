@@ -147,25 +147,26 @@ gh_mle4 <- function(x) {
 
 
 gh_hoaglin1985 <- function(x) {
+  # Initialisation
   out <- new_ghfit()
   
+  # Estimate a
   a <- median(x)
   
-  # estimate g
+  # Estimate g
   p <- c(0.005, 0.01, seq(0.025, 0.475, 0.025))
   z <- qnorm(p)
-  # Add 1e-5 to prevent UHS and LHS to become zero as it creates problem in the log.
-  UHS <- quantile(x, 1 - p) - a + 0.00001
-  LHS <- a - quantile(x, p) + 0.00001
+  UHS <- quantile(x, 1 - p) - a
+  LHS <- a - quantile(x, p)
   g <- (-1 / z) * log(UHS / LHS)
   g <- median(g)
   
-  # regression
+  # Regression
   k <- log((UHS * g) / (exp(-g * z) - 1))
   kk <- (z^2 / 2)
   reg <- stats::lm(k ~ kk)
   
-  # prepare the output
+  # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'quantile'
   out$estimate['a'] <- a
@@ -173,7 +174,7 @@ gh_hoaglin1985 <- function(x) {
   out$estimate['g'] <- g
   out$estimate['h'] <- reg$coef[2]
   
-  # output
+  # Output
   return(out)
 }
 
