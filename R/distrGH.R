@@ -96,22 +96,9 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   x <- data.frame(p = p, a = a, b = b, g = g, h = h)
   rm(p, a, b, g, h)
   
-  # normal
-  z <- qnorm(x$p, 0, 1, lower.tail = lower.tail[1], log.p = log.p[1])
-  
-  # h
-  out <- rep(1, nrow(x))
-  pos <- which(x$h != 0)
-  out[pos] <- with(x, exp(h[pos] * z[pos]^2 / 2))
-  
-  # g
-  pos <- which(x$g == 0)
-  out[pos] <- z[pos] * out[pos]
-  pos <- which(x$g != 0)
-  out[pos] <- (exp(x$g[pos] * z[pos]) - 1) / x$g[pos] * out[pos]
-  
-  # location and scale
-  out <- x$a + x$b * out
+  # computation
+  out <- qnorm(x$p, 0, 1, lower.tail = lower.tail[1], log.p = log.p[1])
+  out <- Tgh(out, x$a, x$b, x$g, x$h)
   
   # output
   return(out)

@@ -27,6 +27,29 @@ gen_GHvalid <- function(n, a, b, g, h) {
 
 
 
+# gh transformation
+# NOTE: all arguments must be valid and vectorised
+Tgh <- function(z, a, b, g, h) {
+  # h
+  out <- rep(1, length(z))
+  pos <- which(h != 0)
+  out[pos] <- exp(h[pos] * z[pos]^2 / 2)
+  
+  # g
+  pos <- which(g == 0)
+  out[pos] <- z[pos] * out[pos]
+  pos <- which(g != 0)
+  out[pos] <- (exp(g[pos] * z[pos]) - 1) / g[pos] * out[pos]
+  
+  # location and scale
+  out <- a + b * out
+  
+  # output
+  return(out)
+}
+
+
+
 # Derivative of gh transformation
 # NOTE: all arguments must be valid and vectorised
 deriv_Tgh <- function(x, b, g, h) {
