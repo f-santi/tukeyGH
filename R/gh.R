@@ -158,21 +158,30 @@ gh_hoaglin1985 <- function(x) {
   z <- qnorm(p)
   UHS <- quantile(x, 1 - p) - a
   LHS <- a - quantile(x, p)
-  g <- (-1 / z) * log(UHS / LHS)
+  g <- -log(UHS / LHS) / z
   g <- median(g)
   
-  # Regression
-  k <- log((UHS * g) / (exp(-g * z) - 1))
-  kk <- (z^2 / 2)
-  reg <- stats::lm(k ~ kk)
+  # Estimate b and h
+  data.frame(
+    y = log((UHS * g) / (exp(-g * z) - 1)),
+    x = z^2 / 2
+  ) -> depo
+  
+  stats::lm(y ~ x, data = depo) %>%
+    use_series('coef') %T>%
+    unname() -> bh
+  
+  if (bh[2] < 0) {
+    bh <- c(mean(depo$y), 0)
+  }
   
   # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'quantile'
   out$estimate['a'] <- a
-  out$estimate['b'] <- exp(reg$coef[1])
+  out$estimate['b'] <- exp(bh[1])
   out$estimate['g'] <- g
-  out$estimate['h'] <- reg$coef[2]
+  out$estimate['h'] <- bh[2]
   
   # Output
   return(out)
