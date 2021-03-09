@@ -35,8 +35,8 @@ deriv_Tgh <- function(x, b, g, h) {
   pos <- which(g == 0)
   out[pos] <- (1 + h[pos] * x[pos]^2) * out[pos]
   pos <- which(g != 0)
-  out[pos] <- (g[pos] + h[pos] * x[pos]) * exp(g[pos] * x[pos]) -
-    h[pos] * x[pos] / g[pos] * out[pos]
+  out[pos] <- ((g[pos] + h[pos] * x[pos]) * exp(g[pos] * x[pos]) -
+    h[pos] * x[pos]) / g[pos] * out[pos]
   
   # output
   return(out)
