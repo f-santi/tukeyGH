@@ -69,8 +69,12 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
       uniroot(
         f = toroot, interval = c(0,1),
         a = xdf$a[j], b = xdf$b[j], g = xdf$g[j], h = xdf$h[j], x = xdf$x[j],
-        ...
-      )$root
+        extendInt = 'yes', ...
+      ) %>%
+        use_series('root') %>%
+        max(0) %>%
+        min(1) %>%
+        return()
     }) %>%
     unlist() %>%
     { `if`(lower.tail[1] == TRUE, ., 1 - .) } %>%
