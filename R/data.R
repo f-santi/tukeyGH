@@ -5,13 +5,15 @@
 #' the Italian bank UniCredit between 2005 and 2014. The data, which are scaled
 #' by an unknown factor for anonymity reasons, have been provided by the
 #' UniCredit's Operational Risk Department. More information related to these
-#' data can be found in \insertCite{bee2021a;textual}{tukeyGH} and
-#' \insertCite{hambuckers2018;textual}{tukeyGH}.
+#' data can be found in \insertCite{hambuckers2018;textual}{tukeyGH} and
+#' \insertCite{bee2021a;textual}{tukeyGH}.
 #'
 #' @name BDSF
 #' @docType data
 #'
 #' @format `numeric` with 152 operational losses.
+#' 
+#' @family data
 #'
 #' @references
 #' \insertAllCited{}
@@ -37,6 +39,8 @@ NULL
 #' @docType data
 #'
 #' @format `numeric` with 583 operational losses.
+#' 
+#' @family data
 #'
 #' @references
 #' \insertAllCited{}
@@ -62,6 +66,8 @@ NULL
 #' @docType data
 #'
 #' @format `numeric` with 417 operational losses.
+#' 
+#' @family data
 #'
 #' @references
 #' \insertAllCited{}
@@ -84,6 +90,8 @@ NULL
 #' @docType data
 #'
 #' @format `numeric` with 97 operational losses.
+#' 
+#' @family data
 #'
 #' @references
 #' \insertAllCited{}
