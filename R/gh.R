@@ -6,6 +6,9 @@
 #' 
 #' @param x data.
 #' @param method estimation method.
+#' @param verbose function verbosity. Values `v`, `vv` and `vvv` are admitted,
+#'   whereas other values (such as `""` or `FALSE`) will make the function
+#'   silent.
 #' 
 #' @return
 #' Object of class `ghfit`. Useful methods include:
@@ -17,7 +20,7 @@
 #' \insertAllCited{}
 #' 
 #' @export
-gh <- function(x, method = c("quantile", "iinference", "mle")) {
+gh <- function(x, method = c("quantile", "iinference", "mle"), verbose = 'v') {
   t0 <- Sys.time()
   
   switch(match.arg(method),
@@ -34,7 +37,7 @@ gh <- function(x, method = c("quantile", "iinference", "mle")) {
 
 
 
-gh_iinference <- function(x) {
+gh_iinference <- function(x, verbose) {
   # Initialisation
   out <- new_ghfit()
   
@@ -77,6 +80,8 @@ gh_iinference <- function(x) {
 
 gh_mle <- function(x) {
   # Initialisation
+  vmessage(verbose, 1, TRUE, 'Maximum likelihood fitting')
+  vmessage(verbose, 2, TRUE, 'Initialisation...')
   out <- new_ghfit()
   
   # Set the starting values via the quantile method
@@ -95,6 +100,7 @@ gh_mle <- function(x) {
   ) -> depo
   
   # Prepare the output
+  vmessage(verbose, 2, TRUE, 'Preparing output...')
   out$distr <- 'g-and-h'
   out$method <- 'mle'
   out$estimate[1:4] <- c(init[1:2], depo$par)

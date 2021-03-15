@@ -10,6 +10,7 @@
 #' @import magrittr
 #'
 #' @importFrom stats median optim optimize qnorm quantile uniroot
+#' @importFrom utils flush.console
 #'
 "_PACKAGE"
 
