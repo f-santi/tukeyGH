@@ -30,8 +30,8 @@ NULL
 #' by means of the monthly Italian consumer price index (base 100: December
 #' 2013). Around one-fourth of the losses are related to financial instruments
 #' and derivative products. More information related to these data can be found
-#' in \insertCite{bee2019;textual}{tukeyGH} and
-#' \insertCite{hambuckers2018;textual}{tukeyGH}.
+#' in \insertCite{hambuckers2018;textual}{tukeyGH} and
+#' \insertCite{bee2019;textual}{tukeyGH}.
 #'
 #' @name CPBP2014
 #' @docType data
@@ -55,8 +55,8 @@ NULL
 #' by means of the monthly Italian consumer price index (base 100: December
 #' 2013). Around one-fourth of the losses are related to financial instruments
 #' and derivative products. More information related to these data can be found
-#' in \insertCite{bee2019;textual}{tukeyGH} and
-#' \insertCite{hambuckers2018;textual}{tukeyGH}.
+#' in \insertCite{hambuckers2018;textual}{tukeyGH} and
+#' \insertCite{bee2019;textual}{tukeyGH}.
 #'
 #' @name EPDM2014
 #' @docType data
@@ -77,8 +77,8 @@ NULL
 #' the Italian bank UniCredit in 2014. The data, which are scaled by an unknown
 #' factor for anonymity reasons, have been provided by the UniCredit's
 #' Operational Risk Department. More information related to these data can be
-#' found in \insertCite{bee2019;textual}{tukeyGH} and
-#' \insertCite{hambuckers2018;textual}{tukeyGH}.
+#' in \insertCite{hambuckers2018;textual}{tukeyGH} and
+#' \insertCite{bee2019;textual}{tukeyGH}.
 #'
 #' @name EPWS2014
 #' @docType data
