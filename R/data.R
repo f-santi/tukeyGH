@@ -58,7 +58,7 @@ NULL
 #' in \insertCite{hambuckers2018;textual}{tukeyGH} and
 #' \insertCite{bee2019;textual}{tukeyGH}.
 #'
-#' @name EPDM2014
+#' @name EDPM2014
 #' @docType data
 #'
 #' @format `numeric` with 417 operational losses.
