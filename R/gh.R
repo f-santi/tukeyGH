@@ -25,7 +25,7 @@ gh <- function(x, method = c("quantile", "iinference", "mle"), verbose = 'v') {
   
   switch(match.arg(method),
     iinference = gh_iinference(x),
-    mle        = gh_mle(x),
+    mle        = gh_mle(x, verbose),
     quantile   = gh_hoaglin1985(x)
   ) -> out  
   
@@ -37,7 +37,7 @@ gh <- function(x, method = c("quantile", "iinference", "mle"), verbose = 'v') {
 
 
 
-gh_iinference <- function(x, verbose) {
+gh_iinference <- function(x) {
   # Initialisation
   out <- new_ghfit()
   
@@ -78,7 +78,7 @@ gh_iinference <- function(x, verbose) {
 
 
 
-gh_mle <- function(x) {
+gh_mle <- function(x, verbose) {
   # Initialisation
   vmessage(verbose, 1, TRUE, 'Maximum likelihood fitting')
   vmessage(verbose, 2, TRUE, 'Initialisation...')
@@ -90,14 +90,8 @@ gh_mle <- function(x) {
     unname -> init
   
   # MLE
-  optim(
-    par = init[3:4],
-    fn = function(theta, x) { loglikGH(c(0, 1, theta), x) },
-    x = x,
-    method = 'L-BFGS-B',
-    lower = c(-Inf, 0),
-    control = list(fnscale = -1)
-  ) -> depo
+  vmessage(verbose, 2, TRUE, 'Estimation...')
+  depo <- gh_mle_sub2(init[3:4], (x - init[1]) / init[2])
   
   # Prepare the output
   vmessage(verbose, 2, TRUE, 'Preparing output...')
