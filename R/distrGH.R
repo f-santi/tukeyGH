@@ -35,7 +35,7 @@
 #' @export
 dgh <- function(x, a = 0, b = 1, g = 0, h = 1, log = FALSE, ...) {
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # compute the new x
   x %>%
@@ -54,7 +54,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   log.p = FALSE, ...) {
   
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
   xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA)
@@ -90,7 +90,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   log.p = FALSE) {
   
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
   x <- data.frame(p = p, a = a, b = b, g = g, h = h)
@@ -110,7 +110,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
 #' @export
 rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # set the number of replications
   if (length(n) > 1) { n <- length(n) }
@@ -155,7 +155,7 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
 #' @export
 infgh <- function(a = 0, b = 1, g = 0, h = 1) {
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
   x <- data.frame(a = a, b = b, g = g, h = h, inf = -Inf)
@@ -175,7 +175,7 @@ infgh <- function(a = 0, b = 1, g = 0, h = 1) {
 #' @export
 supgh <- function(a = 0, b = 1, g = 0, h = 1) {
   # check the params
-  if (!is_GHvalid(a = a, b = b, g = g, h = h)) { stop('Bad parameter value') }
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
   x <- data.frame(a = a, b = b, g = g, h = h, sup = Inf)

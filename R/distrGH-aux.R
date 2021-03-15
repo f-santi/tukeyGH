@@ -1,16 +1,17 @@
 
 # Check the validity of parameters
 is_GHvalid <- function(a, b, g, h) {
+  out <- TRUE
 
   if (!missing(b)) {
-    if (any(b <= 0)) { stop('Parameter "b" must be positive') }
+    if (any(b <= 0)) { out <- 'Parameter "b" must be positive' }
   }
   
   if (!missing(h)) {
-    if (any(h < 0)) { stop('Parameter "h" must be non-negative') }
+    if (any(h < 0)) { out <-  'Parameter "h" must be non-negative' }
   }
   
-  invisible(TRUE)
+  return(out)
 }
 
 
