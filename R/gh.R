@@ -6,7 +6,6 @@
 #' 
 #' @param x data.
 #' @param method estimation method.
-#' @param mixed whether...
 #' 
 #' @return
 #' Object of class `ghfit`. Useful methods include:
@@ -18,22 +17,14 @@
 #' \insertAllCited{}
 #' 
 #' @export
-gh <- function(x, method = c("quantile", "iinference", "mle"), mixed = TRUE) {
+gh <- function(x, method = c("quantile", "iinference", "mle")) {
   t0 <- Sys.time()
   
-  if (mixed == TRUE) {
-    switch(match.arg(method),
-      iinference = gh_iinference(x),
-      mle        = gh_mle2(x),
-      quantile   = gh_hoaglin1985(x)
-    ) -> out  
-  } else {
-    switch(match.arg(method),
-      iinference = gh_iinference(x),
-      mle        = gh_mle4(x),
-      quantile   = gh_hoaglin1985(x)
-    ) -> out
-  }
+  switch(match.arg(method),
+    iinference = gh_iinference(x),
+    mle        = gh_mle(x),
+    quantile   = gh_hoaglin1985(x)
+  ) -> out  
   
   out$call <- match.call()
   out$time <- Sys.time() - t0
@@ -44,15 +35,15 @@ gh <- function(x, method = c("quantile", "iinference", "mle"), mixed = TRUE) {
 
 
 gh_iinference <- function(x) {
-  # initialtisation
+  # Initialisation
   out <- new_ghfit()
   
-  # set starting values via the quantile method
+  # Set starting values via the quantile method
   gh_hoaglin1985(x) %>%
     use_series('estimate') %>%
     pmax(c(-Inf, -Inf, 0, 1e-50)) -> init
   
-  # computing pseudo MLes
+  # Computing pseudo MLes
   optim(
     par = c(0.1, 0.51),
     fn = function(theta, x) { loglikST(c(init[1:2], theta), x) },
@@ -72,20 +63,20 @@ gh_iinference <- function(x) {
     parmt = depoH$par, W = W, nsim = 5000
   ) -> depo
   
-  # prepare the output
+  # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'iinference'
   out$estimate[1:4] <- c(init[1:2], depo$par)
   out$estimator <- depo
   
-  # output
+  # Output
   return(out)
 }
 
 
 
-gh_mle2 <- function(x) {
-  # Initialtisation
+gh_mle <- function(x) {
+  # Initialisation
   out <- new_ghfit()
   
   # Set the starting values via the quantile method
@@ -109,38 +100,7 @@ gh_mle2 <- function(x) {
   out$estimate[1:4] <- c(init[1:2], depo$par)
   out$estimator <- depo
   
-  # output
-  return(out)
-}
-
-
-
-gh_mle4 <- function(x) {
-  # Initialtisation
-  out <- new_ghfit()
-  
-  # Set the starting values via the quantile method
-  gh_hoaglin1985(x) %>%
-    use_series('estimate') %>%
-    unname -> init
-  
-  # MLE
-  optim(
-    par = init,
-    fn = loglikGH,
-    x = x,
-    method = 'L-BFGS-B',
-    lower = c(-Inf, 0, -Inf, 0),
-    control = list(fnscale = -1)
-  ) -> depo
-  
-  # Prepare the output
-  out$distr <- 'g-and-h'
-  out$method <- 'mle'
-  out$estimate[1:4] <- depo$par
-  out$estimator <- depo
-  
-  # output
+  # Output
   return(out)
 }
 
@@ -222,7 +182,7 @@ summary.ghfit <- function(object, ...) {
     sep = ''
   )
   
-  # output
+  # Output
   invisible(object)
 }
 
