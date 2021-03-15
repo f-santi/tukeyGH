@@ -13,8 +13,8 @@ Authors@R: c(
       role = c('aut'), comment = c(ORCID = "0000-0001-8613-0962")))
 Author: Flavio Santi [cre, aut] (<https://orcid.org/0000-0002-2014-1981>),
     Marco Bee [aut] (<https://orcid.org/0000-0002-9579-3650>),
-    Luca Trapin [aut] (<https://orcid.org/0000-0001-8613-0962>),
-    Julien Hambuckers [aut] (<https://orcid.org/0000-0003-4567-5477>)
+    Julien Hambuckers [aut] (<https://orcid.org/0000-0003-4567-5477>),
+    Luca Trapin [aut] (<https://orcid.org/0000-0001-8613-0962>)
 Maintainer: Flavio Santi <flavio.santi@univr.it>
 BugReports: https://github.com/f-santi/tukeyGH/issues
 Description: It provides distribution, density and quantile functions of the
