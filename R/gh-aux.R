@@ -11,6 +11,7 @@ new_ghfit <- function() {
     n = 0,
     x = NULL,
     estimator = NULL,
+    init = c('a' = NA, 'b' = NA, 'g' = NA, 'h' = NA),
     time = NULL
   ) %>%
     structure(class = 'ghfit') %>%
@@ -20,6 +21,10 @@ new_ghfit <- function() {
 
 
 gh_mle_sub2 <- function(init, x) {
+  # Checks on starting values
+  if ((msg <- is_GHvalid(g = init[1], h = init[2])) != TRUE) { stop(msg) }
+  
+  # Estimation
   optim(
     par = init,
     fn = function(theta, xdata) { loglikGH(c(0, 1, theta), xdata) },

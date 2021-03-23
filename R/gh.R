@@ -91,7 +91,32 @@ gh_mle <- function(x, verbose) {
   
   # MLE
   vmessage(verbose, 2, TRUE, 'Estimation...')
-  depo <- gh_mle_sub2(init[3:4], (x - init[1]) / init[2])
+  # First try
+  vmessage(verbose, 3, TRUE, '   - trying starting from: quantile')
+  out$init[3:4] <- init[3:4]
+  depo <- try(gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]), silent = TRUE)
+  # Second try
+  if (inherits(depo, 'try-error')) {
+    vmessage(verbose, 3, TRUE, '   - trying starting from: quantile + 0.1')
+    out$init[3:4] <- init[3:4] + c(0.1, 0.1)
+    depo <- try(
+      gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      silent = TRUE
+    )
+  }
+  # Third try
+  if (inherits(depo, 'try-error')) {
+    vmessage(verbose, 3, TRUE, '   - trying starting from: quantile - 0.1')
+    out$init[3:4] <- init[3:4] - c(0.1, 0.1)
+    depo <- try(
+      gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      silent = TRUE
+    )
+  }
+  # Exit
+  if (inherits(depo, 'try-error')) {
+    stop('optimisation algorithm cannot be initialised')
+  }
   
   # Prepare the output
   vmessage(verbose, 2, TRUE, 'Preparing output...')
