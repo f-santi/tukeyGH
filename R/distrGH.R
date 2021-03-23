@@ -7,10 +7,26 @@
 #' functions with the exception of `rgh` are vectorized with respect to all 
 #' arguments on the Tukey's distribution (`x`, `q`, `p`, `a`, `b`, `g`, `h`).
 #' 
+#' Given a Gaussian random variable \eqn{Z\sim\mathcal{N}(0, 1)}, the following
+#' transformation:
+#' \deqn{
+#' X=a+b\,\frac{e^{gZ}-1}{g}\,e^{\frac{hZ^2}{2}}
+#' }
+#' defines the Tukey's g-and-h distribution. Hence \eqn{X\sim gh(a, b, g, h)}
+#' denotes a random variable distributed according to the Tukey's g-and-h
+#' distribution function, where \eqn{a\in\mathbf{R}} is the location parameter,
+#' \eqn{b\in\mathbf{R}^+} is the scale parameter, \eqn{g\in\mathbf{R}} is the
+#' skewness parameter, and \eqn{h\in\mathbf{R}^+} is the shape parameter.
+#' 
+#' In principle, the shape parameter \eqn{h} may also take negative values,
+#' however, in such a case, the above transformation is not monotone. All
+#' functions on this page require that \eqn{h\geq0}.
+#' 
 #' @inheritParams stats::rnorm
 #' @param p vector of probabilities.
 #' @param g skewness parameter(s).
-#' @param h heavy-taildness parameter(s).
+#' @param h heavy-taildness parameter(s). Only non-negative values will be
+#'   accepted (see *Details*).
 #' @param a location parameter(s).
 #' @param b scale parameter(s).
 #' @param ... arguments passed to `uniroot`.
@@ -33,7 +49,7 @@
 #' @name distr-gh
 #' 
 #' @export
-dgh <- function(x, a = 0, b = 1, g = 0, h = 1, log = FALSE, ...) {
+dgh <- function(x, a = 0, b = 1, g = 0, h = 0.2, log = FALSE, ...) {
   # check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
@@ -50,7 +66,7 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 1, log = FALSE, ...) {
 
 #' @rdname distr-gh
 #' @export
-pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
+pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   log.p = FALSE, ...) {
   
   # check the params
@@ -86,7 +102,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
 
 #' @rdname distr-gh
 #' @export
-qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
+qgh <- function(p, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   log.p = FALSE) {
   
   # check the params
@@ -108,7 +124,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
 
 #' @rdname distr-gh
 #' @export
-rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
+rgh <- function(n, a = 0, b = 1, g = 0, h = 0.2) {
   # check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
@@ -153,7 +169,7 @@ rgh <- function(n, a = 0, b = 1, g = 0, h = 1) {
 
 #' @rdname distr-gh
 #' @export
-infgh <- function(a = 0, b = 1, g = 0, h = 1) {
+infgh <- function(a = 0, b = 1, g = 0, h = 0.2) {
   # check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
@@ -173,7 +189,7 @@ infgh <- function(a = 0, b = 1, g = 0, h = 1) {
 
 #' @rdname distr-gh
 #' @export
-supgh <- function(a = 0, b = 1, g = 0, h = 1) {
+supgh <- function(a = 0, b = 1, g = 0, h = 0.2) {
   # check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
