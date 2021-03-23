@@ -156,7 +156,7 @@ gh_hoaglin1985 <- function(x) {
     use_series('coef') %T>%
     unname() -> bh
   
-  if (bh[2] < 0) { bh <- c(mean(depo$y), 0) }
+  #if (bh[2] < 0) { bh <- c(mean(depo$y), 0) }
   
   # Prepare the output
   out$distr <- 'g-and-h'
