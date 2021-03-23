@@ -57,7 +57,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
-  xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA)
+  xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA, row.names = NULL)
   rm(q, a, b, g, h)
   
   # function to be zeroed
@@ -93,7 +93,7 @@ qgh <- function(p, a = 0, b = 1, g = 0, h = 1, lower.tail = TRUE,
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
-  x <- data.frame(p = p, a = a, b = b, g = g, h = h)
+  x <- data.frame(p = p, a = a, b = b, g = g, h = h, row.names = NULL)
   rm(p, a, b, g, h)
   
   # computation
@@ -158,7 +158,7 @@ infgh <- function(a = 0, b = 1, g = 0, h = 1) {
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
-  x <- data.frame(a = a, b = b, g = g, h = h, inf = -Inf)
+  x <- data.frame(a = a, b = b, g = g, h = h, inf = -Inf, row.names = NULL)
   rm(a, b, g, h)
   
   # computation
@@ -178,7 +178,7 @@ supgh <- function(a = 0, b = 1, g = 0, h = 1) {
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   # vectorisation
-  x <- data.frame(a = a, b = b, g = g, h = h, sup = Inf)
+  x <- data.frame(a = a, b = b, g = g, h = h, sup = Inf, row.names = NULL)
   rm(a, b, g, h)
   
   # computation
