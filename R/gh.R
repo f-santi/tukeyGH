@@ -223,7 +223,7 @@ summary.ghfit <- function(object, ...) {
     'Observations: ', object$n, ', degrees of freedom: ', object$df,
     ifelse(
       test = is.na(object$loglik),
-      yes = NULL,
+      yes = '',
       no = paste0(
         ', Log-lik: ', format(object$loglik), '\n', 'AIC: ',
         format(object$AIC), ', ', 'BIC: ', format(object$BIC)
