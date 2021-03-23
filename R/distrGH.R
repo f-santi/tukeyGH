@@ -22,6 +22,14 @@
 #' however, in such a case, the above transformation is not monotone. All
 #' functions on this page require that \eqn{h\geq0}.
 #' 
+#' Note that, when \eqn{g=0}, the limit for \eqn{g\to 0} of the previous
+#' transformation is considered:
+#' \deqn{
+#' X=\lim_{g\to0}\left(a+b\,\frac{e^{gZ}-1}{g}\,e^{\frac{hZ^2}{2}}\right)=
+#' a+b\,Z\,e^{\frac{hZ^2}{2}}
+#' }
+#' so that \eqn{X\sim gh(a, b, 0, h)}.
+#' 
 #' @inheritParams stats::rnorm
 #' @param p vector of probabilities.
 #' @param g skewness parameter(s).
