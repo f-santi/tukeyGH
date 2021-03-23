@@ -31,6 +31,19 @@ gh <- function(x, method = c("quantile", "iinference", "mle"), verbose = 'v') {
   
   out$call <- match.call()
   out$time <- Sys.time() - t0
+  out$n <- length(x)
+  out$df <- out$n - 4
+  
+  depo <- with(out,
+    is_GHvalid(estimate[1], estimate[2], estimate[3], estimate[4])
+  )
+  if (is.character(depo)) {
+    out$loglik <- NA
+  } else {
+    out$loglik <- loglikGH(out$estimate, x)
+    out$AIC <- 2 * out$df - 2 * out$loglik
+    out$BIC <- out$df * log(out$n) - 2 * out$loglik
+  }
   
   return(out)
 }
@@ -69,6 +82,7 @@ gh_iinference <- function(x) {
   # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'iinference'
+  out$textmethod <- 'Indirect Inference'
   out$estimate[1:4] <- c(init[1:2], depo$par)
   out$estimator <- depo
   
@@ -122,6 +136,7 @@ gh_mle <- function(x, verbose) {
   vmessage(verbose, 2, TRUE, 'Preparing output...')
   out$distr <- 'g-and-h'
   out$method <- 'mle'
+  out$textmethod <- 'Maxmimum likelihood'
   out$estimate[1:4] <- c(init[1:2], depo$par)
   out$estimator <- depo
   
@@ -161,6 +176,7 @@ gh_hoaglin1985 <- function(x) {
   # Prepare the output
   out$distr <- 'g-and-h'
   out$method <- 'quantile'
+  out$textmethod <- 'Quantile (Hoaglin, 1985)'
   out$estimate['a'] <- a
   out$estimate['b'] <- exp(bh[1])
   out$estimate['g'] <- g
@@ -197,14 +213,22 @@ summary.ghfit <- function(object, ...) {
   print(object$call)
   cat('\nParameters:\n\n')
   depo <- as.matrix(object$estimate)
-  colnames(depo) <- 'est.'
+  colnames(depo) <- 'Estimate'
   rownames(depo) %<>% paste0('  ')
   print(signif(depo, 4))
   
   cat('\n',
-    'Estimation method: ', object$method, '\n',
-    'Estimation time: ', signif(object$time, 3), ' ', units(object$time), '\n',
-    sep = ''
+    'Fitting method: ', object$textmethod, ', ',
+    'Computation time: ', signif(object$time, 3), ' ', units(object$time), '\n',
+    'Observations: ', object$n, ', degrees of freedom: ', object$df,
+    ifelse(
+      test = is.na(object$loglik),
+      yes = NULL,
+      no = paste0(
+        ', Log-lik: ', format(object$loglik), '\n', 'AIC: ',
+        format(object$AIC), ', ', 'BIC: ', format(object$BIC)
+      )
+    ), '\n', sep = ''
   )
   
   # Output

@@ -4,14 +4,19 @@ new_ghfit <- function() {
   list(
     distr = NULL,
     method = NULL,
+    textmethod = NULL,
     call = NULL,
     estimate = c('a' = NA, 'b' = NA, 'g' = NA, 'h' = NA),
     sd = NULL,
     vcov = NULL,
     n = 0,
+    df = NA,
     x = NULL,
     estimator = NULL,
     init = c('a' = NA, 'b' = NA, 'g' = NA, 'h' = NA),
+    loglik = NA,
+    AIC = NA,
+    BIC = NA,
     time = NULL
   ) %>%
     structure(class = 'ghfit') %>%
