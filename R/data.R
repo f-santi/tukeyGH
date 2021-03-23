@@ -33,7 +33,7 @@ NULL
 #' 2013). Around one-fourth of the losses are related to financial instruments
 #' and derivative products. More information related to these data can be found
 #' in \insertCite{hambuckers2018;textual}{tukeyGH} and
-#' \insertCite{bee2019;textual}{tukeyGH}.
+#' \insertCite{bee2019a;textual}{tukeyGH}.
 #'
 #' @name CPBP2014
 #' @docType data
@@ -60,7 +60,7 @@ NULL
 #' 2013). Around one-fourth of the losses are related to financial instruments
 #' and derivative products. More information related to these data can be found
 #' in \insertCite{hambuckers2018;textual}{tukeyGH} and
-#' \insertCite{bee2019;textual}{tukeyGH}.
+#' \insertCite{bee2019a;textual}{tukeyGH}.
 #'
 #' @name EDPM2014
 #' @docType data
@@ -84,7 +84,7 @@ NULL
 #' factor for anonymity reasons, have been provided by the UniCredit's
 #' Operational Risk Department. More information related to these data can be
 #' in \insertCite{hambuckers2018;textual}{tukeyGH} and
-#' \insertCite{bee2019;textual}{tukeyGH}.
+#' \insertCite{bee2019a;textual}{tukeyGH}.
 #'
 #' @name EPWS2014
 #' @docType data

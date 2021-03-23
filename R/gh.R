@@ -1,11 +1,14 @@
 
 #' Fit the Tukey's g-and-h distribution
 #' 
-#' Fit the Tukey's g-and-h distribution on a dataset through various estimation
-#' methods: `"quantile"` \insertCite{hoaglin1985}{tukeyGH}.
+#' Fit the Tukey's g-and-h distribution on a dataset through various methods:
+#' quantile estimator by \insertCite{hoaglin1985;textual}{tukeyGH}, indirect
+#' inference \insertCite{bee2019a}{tukeyGH}, and maximum likelihood
+#' \insertCite{bee2019b}{tukeyGH}.
 #' 
-#' @param x data.
-#' @param method estimation method.
+#' @param x data as a `numeric`.
+#' @param method estimation method (partial string matching is allowed).
+#'   Indirect inference is adopted as default.
 #' @param verbose function verbosity. Values `v`, `vv` and `vvv` are admitted,
 #'   whereas other values (such as `""` or `FALSE`) will make the function
 #'   silent.
@@ -19,8 +22,26 @@
 #' @references
 #' \insertAllCited{}
 #' 
+#' @examples 
+#' data("BDSF")
+#' 
+#' # Fit to BDSF data through indirect inference
+#' modII <- gh(BDSF)
+#' summary(modII)
+#' 
+#' # Fit to BDSF data through the quantile estimator
+#' modQ <- gh(BDSF, method = "quantile")
+#' summary(modQ)
+#' 
+#' \dontrun{
+#' 
+#' # Fit to BDSF data through MLE (the computation time is much longer)
+#' modMLE <- gh(BDSF, method = "mle")
+#' summary(modMLE)
+#' }
+#' 
 #' @export
-gh <- function(x, method = c("quantile", "iinference", "mle"), verbose = 'v') {
+gh <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v') {
   t0 <- Sys.time()
   
   switch(match.arg(method),
