@@ -44,29 +44,27 @@ fitGH_mle_sub2 <- function(init, x) {
 
 # Bootstrap estimation of matrix Xi
 XiBoot <- function(x, nboot, init) {
-  # initialisation
+  # Initialisation
   n <- length(x)
   out <- matrix(0, nboot, 2)
   
   for (i in seq_len(nboot)) {
-    # bootstrap
+    # Bootstrap
     xboot <- x[sample(n, n, replace = TRUE)]
-    # quantile estimator
+    # Quantile estimator
     Qest <- fitGH_hoaglin1985(x)$estimate
-    # standardisation
-    xstd <- (xboot - Qest[1]) / Qest[2]
-    # pseudo MLE
+    # Pseudo MLE
     optim(
       par = init,
       fn = function(theta, x) { loglikST(c(0, 1, theta), x) },
-      x = xstd,
+      x = (xboot - Qest[1]) / Qest[2],
       control = list(fnscale = -1)
     ) -> depo
-    # results
+    # Results
     out[i, ] <- depo$par
   }
   
-  # output
+  # Output
   stats::cov(out)
 }
 
