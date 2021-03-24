@@ -77,32 +77,42 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 0.2, log = FALSE, ...) {
 pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   log.p = FALSE, ...) {
   
-  # check the params
+  # Check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
-  # vectorisation
+  # Vectorisation
   xdf <- data.frame(x = q, a = a, b = b, g = g, h = h, p = NA, row.names = NULL)
   rm(q, a, b, g, h)
   
-  # function to be zeroed
-  toroot <- function(p, a, b, g, h, x) { return(qgh(p, a, b, g, h) - x) }
+  # Function to be zeroed
+  toroot <- function(p, a, b, g, h, x) {
+    return(qgh(p, a, b, g, h, log.p = log.p[1]) - x)
+  }
   
-  # computation
+  # Settings for argument "log.p"
+  if (log.p[1] == TRUE) {
+    interval <- c(-100, 0)
+    bounds <- c(-Inf, 0)
+  } else {
+    interval <- c(0, 1)
+    bounds <- c(0, 1)
+  }
+  
+  # Computation
   seq_len(nrow(xdf)) %>%
     lapply(function(j) {
       uniroot(
-        f = toroot, interval = c(0,1),
+        f = toroot, interval = interval,
         a = xdf$a[j], b = xdf$b[j], g = xdf$g[j], h = xdf$h[j], x = xdf$x[j],
         extendInt = 'yes', ...
       ) %>%
         use_series('root') %>%
-        max(0) %>%
-        min(1) %>%
+        max(bounds[1]) %>%
+        min(bounds[2]) %>%
         return()
     }) %>%
     unlist() %>%
     { `if`(lower.tail[1] == TRUE, ., 1 - .) } %>%
-    { `if`(log.p[1] == TRUE, log(.), .) } %>%
     return()
 }
 
