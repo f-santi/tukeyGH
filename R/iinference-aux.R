@@ -36,12 +36,12 @@ iinferenceGH_ST <- function(x, parmt, W, nsim) {
   
   # optimisation
   hatPsi <- optim(
-    par = c(0.1, 0.51),
+    par = c(0.1, 0.5),
     fn = function(theta, x) { loglikST(c(0, 1, theta), x) },
     x = xsim,
     method = "L-BFGS-B",
-    lower = c(0.01, 0.01),
-    upper = c(10, Inf),
+    lower = c(-Inf, 0),
+    upper = c(Inf, Inf),
     control = list(fnscale = -1)
   )
   

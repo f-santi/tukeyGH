@@ -79,11 +79,11 @@ fitGH_iinference <- function(x) {
   # Set starting values via the quantile method
   fitGH_hoaglin1985(x) %>%
     use_series('estimate') %>%
-    pmax(c(-Inf, -Inf, 0, 1e-50)) -> init
+    pmax(c(-Inf, -Inf, 0.1, 0.5)) -> init
   
   # Computing pseudo MLes
   optim(
-    par = c(0.1, 0.51),
+    par = c(0.1, 0.5),
     fn = function(theta, x) { loglikST(c(init[1:2], theta), x) },
     x = x,
     control = list(fnscale = -1)
@@ -95,7 +95,7 @@ fitGH_iinference <- function(x) {
   minqa::bobyqa(
     par = init[3:4],
     fn = iinferenceGH_ST,
-    lower = c(0, 1e-50),
+    lower = c(-Inf, 0),
     upper = c(Inf, Inf),
     control = list(iprint = 0, maxfun = 600),
     parmt = depoH$par, W = W, nsim = 5000
