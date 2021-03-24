@@ -15,7 +15,7 @@
 #' @export
 testGvsGH <- function(x, nreps) {  
   
-  Qest <- gh_hoaglin1985(x)$estimate
+  Qest <- fitGH_hoaglin1985(x)$estimate
   x <- (x - Qest[1]) / Qest[2]
   xmin <- min(x)
   
@@ -61,7 +61,7 @@ testGvsGH <- function(x, nreps) {
   
   while (i <= nreps) {
     xsim <- rgh(n, 0, 1, MLE1obs, 0)
-    Qest <- gh_hoaglin1985(xsim)$estimate
+    Qest <- fitGH_hoaglin1985(xsim)$estimate
     xsim <- (xsim - Qest[1]) / Qest[2]
     xmin <- min(xsim)
     

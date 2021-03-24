@@ -9,7 +9,7 @@ XiBoot <- function(x, nboot, init) {
     # bootstrap
     xboot <- x[sample(n, n, replace = TRUE)]
     # quantile estimator
-    Qest <- gh_hoaglin1985(x)$estimate
+    Qest <- fitGH_hoaglin1985(x)$estimate
     # standardisation
     xstd <- (xboot - Qest[1]) / Qest[2]
     # pseudo MLE

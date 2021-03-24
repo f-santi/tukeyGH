@@ -8,7 +8,7 @@ test_that("GH fitting through Hoaglin (1985) works", {
     unlist()
   
   # Fit the distribution
-  est <- unname(gh_hoaglin1985(x)$estimate)
+  est <- unname(fitGH_hoaglin1985(x)$estimate)
   
   # Check
   expect_equal(est[1], theta$a)

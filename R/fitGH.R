@@ -14,7 +14,7 @@
 #'   silent.
 #' 
 #' @return
-#' Object of class `ghfit`. Useful methods include:
+#' Object of class `fitGH`. Useful methods include:
 #' * `coef()` point estimates of parameters
 #' * `print()` short information about the object
 #' * `summary()` summary information about the estimation process
@@ -26,31 +26,32 @@
 #' data("BDSF")
 #' 
 #' # Fit to BDSF data through indirect inference
-#' modII <- gh(BDSF)
+#' modII <- fitGH(BDSF)
 #' summary(modII)
 #' 
 #' # Fit to BDSF data through the quantile estimator
-#' modQ <- gh(BDSF, method = "quantile")
+#' modQ <- fitGH(BDSF, method = "quantile")
 #' summary(modQ)
 #' 
 #' \dontrun{
 #' 
 #' # Fit to BDSF data through MLE (the computation time is much longer)
-#' modMLE <- gh(BDSF, method = "mle")
+#' modMLE <- fitGH(BDSF, method = "mle")
 #' summary(modMLE)
 #' }
 #' 
 #' @export
-gh <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v') {
+fitGH <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v') {
   t0 <- Sys.time()
   
   switch(match.arg(method),
-    iinference = gh_iinference(x),
-    mle        = gh_mle(x, verbose),
-    quantile   = gh_hoaglin1985(x)
+    iinference = fitGH_iinference(x),
+    mle        = fitGH_mle(x, verbose),
+    quantile   = fitGH_hoaglin1985(x)
   ) -> out  
   
   out$call <- match.call()
+  out$x <- x
   out$time <- Sys.time() - t0
   out$n <- length(x)
   out$df <- out$n - 4
@@ -71,12 +72,12 @@ gh <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v') {
 
 
 
-gh_iinference <- function(x) {
+fitGH_iinference <- function(x) {
   # Initialisation
-  out <- new_ghfit()
+  out <- new_fitGH()
   
   # Set starting values via the quantile method
-  gh_hoaglin1985(x) %>%
+  fitGH_hoaglin1985(x) %>%
     use_series('estimate') %>%
     pmax(c(-Inf, -Inf, 0, 1e-50)) -> init
   
@@ -113,14 +114,14 @@ gh_iinference <- function(x) {
 
 
 
-gh_mle <- function(x, verbose) {
+fitGH_mle <- function(x, verbose) {
   # Initialisation
   vmessage(verbose, 1, TRUE, 'Maximum likelihood fitting')
   vmessage(verbose, 2, TRUE, 'Initialisation...')
-  out <- new_ghfit()
+  out <- new_fitGH()
   
   # Set the starting values via the quantile method
-  gh_hoaglin1985(x) %>%
+  fitGH_hoaglin1985(x) %>%
     use_series('estimate') %>%
     unname -> init
   
@@ -129,13 +130,13 @@ gh_mle <- function(x, verbose) {
   # First try
   vmessage(verbose, 3, TRUE, '   - trying starting from: quantile')
   out$init[3:4] <- init[3:4]
-  depo <- try(gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]), silent = TRUE)
+  depo <- try(fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]), silent = TRUE)
   # Second try
   if (inherits(depo, 'try-error')) {
     vmessage(verbose, 3, TRUE, '   - trying starting from: quantile + 0.1')
     out$init[3:4] <- init[3:4] + c(0.1, 0.1)
     depo <- try(
-      gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
       silent = TRUE
     )
   }
@@ -144,7 +145,7 @@ gh_mle <- function(x, verbose) {
     vmessage(verbose, 3, TRUE, '   - trying starting from: quantile - 0.1')
     out$init[3:4] <- init[3:4] - c(0.1, 0.1)
     depo <- try(
-      gh_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
       silent = TRUE
     )
   }
@@ -167,9 +168,9 @@ gh_mle <- function(x, verbose) {
 
 
 
-gh_hoaglin1985 <- function(x) {
+fitGH_hoaglin1985 <- function(x) {
   # Initialisation
-  out <- new_ghfit()
+  out <- new_fitGH()
   
   # Estimate a
   a <- median(x)
@@ -210,7 +211,7 @@ gh_hoaglin1985 <- function(x) {
 
 
 #' @export
-print.ghfit <- function(x, ...) {
+print.fitGH <- function(x, ...) {
   cat('\nCall:\n')
   print(x$call)
   cat('\nPoint estimates:\n')
@@ -223,12 +224,12 @@ print.ghfit <- function(x, ...) {
 
 
 #' @export
-coef.ghfit <- function(object, ...) { object$estimate }
+coef.fitGH <- function(object, ...) { object$estimate }
 
 
 
 #' @export
-summary.ghfit <- function(object, ...) {
+summary.fitGH <- function(object, ...) {
   cat('\nFitted', toupper(object$distr), 'distribution\n')
   cat('\nCall:\n')
   print(object$call)
@@ -255,4 +256,6 @@ summary.ghfit <- function(object, ...) {
   # Output
   invisible(object)
 }
+
+
 

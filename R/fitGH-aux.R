@@ -1,6 +1,6 @@
 
-# Instantiate a new object of S3 class "ghfit"
-new_ghfit <- function() {
+# Instantiate a new object of S3 class "fitGH"
+new_fitGH <- function() {
   list(
     distr = NULL,
     method = NULL,
@@ -19,13 +19,13 @@ new_ghfit <- function() {
     BIC = NA,
     time = NULL
   ) %>%
-    structure(class = 'ghfit') %>%
+    structure(class = 'fitGH') %>%
     return()
 }
 
 
 
-gh_mle_sub2 <- function(init, x) {
+fitGH_mle_sub2 <- function(init, x) {
   # Checks on starting values
   if ((msg <- is_GHvalid(g = init[1], h = init[2])) != TRUE) { stop(msg) }
   
