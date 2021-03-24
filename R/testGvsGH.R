@@ -7,7 +7,7 @@
 #' @param nreps number of replications.
 #' 
 #' @return
-#' Object of class `ghtest`.
+#' Object of class `testGvsGH`.
 #'  
 #' @references
 #' \insertAllCited{}
@@ -15,23 +15,24 @@
 #' @export
 testGvsGH <- function(x, nreps) {  
   
+  # Initialisation
   Qest <- fitGH_hoaglin1985(x)$estimate
   x <- (x - Qest[1]) / Qest[2]
   xmin <- min(x)
   
-  # estimation under H_0
-  res1 <- optimize(
+  # Fit under Hp0 (g)
+  depo <- optimize(
     f = function(theta, x) { loglikGH(c(0, 1, theta, 0), x) },
     interval = c(0, -1 / xmin),
     x = x,
     maximum = TRUE
   )
-  MLE1 <- res1$maximum
-  max1 <- res1$objective
+  mleG <- depo$maximum
+  maxG <- depo$objective
   
-  # unrestricted estimation
-  res2 <- optim(
-    par = c(MLE1, max(c(Qest[4], 0))),
+  # Unrestricted fitting (g-and-h)
+  depo <- optim(
+    par = c(mleG, max(Qest[4], 0)),
     fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
     x = x,
     method = 'L-BFGS-B',
@@ -39,64 +40,57 @@ testGvsGH <- function(x, nreps) {
     upper = c(Inf, Inf),
     control = list(fnscale = -1)
   )
+  maxGH <- depo$value 
+  mleGH <- depo$par 
+  observed_llr <- pmax(2 * (maxGH - maxG), 0)
   
-  max2 <- res2$value 
-  pars2 <- res2$par 
-  MLE1obs <- pars2[1]
-  
-  llrobs <- 2 * (max2 - max1)
-  llr1obs <- pmax(2 * (max2 - max1), 0)
-  
-  # simulation of the null distribution
-  n <- length(x)
-  MLE1 <- rep(0, nreps)
-  MLE2 <- rep(0, nreps)
-  max1 <- rep(0, nreps)
-  max2 <- rep(0, nreps)
-  pars2 <- matrix(0, nreps, 2)
-  conv <- rep(0, nreps)
+  # Simulation of the null distribution
   llr <- rep(0, nreps)
   
-  i <- 1
-  
-  while (i <= nreps) {
-    xsim <- rgh(n, 0, 1, MLE1obs, 0)
+  for (i in seq_len(nreps)) {
+    vmessage('v', 1, TRUE, 'iterazione ', i)
+    # Simulation
+    xsim <- rgh(n = length(x), a = 0, b = 1, g = mleGH[1], h =0)
     Qest <- fitGH_hoaglin1985(xsim)$estimate
     xsim <- (xsim - Qest[1]) / Qest[2]
     xmin <- min(xsim)
     
-    # estimating under H_0
-    res1 <- optimize(
+    # Fit under Hp0 (g)
+    depo <- optimize(
       f = function(theta, x) { loglikGH(c(0, 1, theta, 0), x) },
       interval = c(0, -1 / xmin),
       x = xsim,
       maximum = TRUE
     )
-    MLE1[i] <- res1$maximum
-    max1[i] <- res1$objective
+    maxG <- depo$objective
     
-    # unrestricted estimation
-    res2 <- optim(
-      par = c(MLE1[i], max(c(Qest[4], 0))),
+    # Unrestricted fitting (g-and-h)
+    vmessage('v', 1, FALSE, '          * ', depo$maximum, ' | ', Qest[4],
+      ' || ', loglikGH(c(0, 1, depo$maximum, max(Qest[4], 0)), xsim)
+    )
+    depo <- optim(
+      par = c(depo$maximum, max(Qest[4], 0)),
       fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
       x = xsim,
-      method='L-BFGS-B',
-      lower = c(1e-10,0),
-      upper = c(Inf,Inf),
+      method ='L-BFGS-B',
+      lower = c(1e-10, 0),
+      upper = c(Inf, Inf),
       control = list(fnscale = -1)
     )
-    max2[i] <- res2$value 
-    pars2[i, ] <- res2$par 
-    MLE2[i] <- pars2[1]
+    maxGH <- depo$value 
     
-    # set the test stat. to 0 in cases when round-off error produces a negative value
-    llr[i] <- pmax(2 * (max2[i] - max1[i]), 0)
-    
-    i <- i + 1
+    # Compute the test statistic
+    llr[i] <- pmax(2 * (maxGH - maxG), 0)
   }
   
-  pval <- length(llr[llr > llr1obs]) / nreps
-  
-  # output
-  list(pars2 = pars2, llr = llr, llr1obs = llr1obs, pval = pval)
+  # Output
+  list(
+    n = length(x),
+    nreps = nreps,
+    statistic = observed_llr,
+    llr = llr,
+    p.value = mean(llr > observed_llr)
+  ) %>%
+    structure(class = 'testGvsGH') %>%
+    return()
 }
