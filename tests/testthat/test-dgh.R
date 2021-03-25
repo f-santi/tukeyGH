@@ -19,4 +19,14 @@ test_that("dgh works", {
     with(depo, dnorm(depox, a, b)),
     tolerance = 1e-7
   )
+  
+  # Cfr. with Lognormal
+  depo <- gen_GHvalid(100, h = 0)
+  depo$g %<>% abs
+  depo$x <- with(depo, mapply(rg, a = a, b = b, g = g, MoreArgs = list(n = 1)))
+  expect_equal(
+    with(depo, dgh(depo$x, a, b, g, h, tol = 1e-7)),
+    with(depo, g / b * dlnorm(1 + g * (depo$x - a) / b, 0, g)),
+    tolerance = 1e-7
+  )
 })
