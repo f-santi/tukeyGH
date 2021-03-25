@@ -29,7 +29,16 @@
 #' 
 #' @export
 dg <- function(x, a = 0, b = 1, g = 0, log = FALSE, ...) {
-  dgh(x = x, a = a, b = b, g = g, h = 0, log = log[1], ...)
+  # Check the params
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = 0)) != TRUE) { stop(msg) }
+  
+  # Computation
+  x %>%
+    pg(a = a, b = b, g = g, log.p = log, ...) %>%
+    qnorm(log.p = log) %>%
+    { stats::dnorm(.) / deriv_Tg(., b = b, g = g) } %>%
+    { `if`(log[1] == TRUE, log(.), .) } %>%
+    return()
 }
 
 
@@ -37,8 +46,17 @@ dg <- function(x, a = 0, b = 1, g = 0, log = FALSE, ...) {
 #' @rdname distr-g
 #' @export
 pg <- function(q, a = 0, b = 1, g = 0, lower.tail = TRUE, log.p = FALSE, ...) {
-  pgh(q = q, a = a, b = b, g = g, h = 0, lower.tail = lower.tail[1],
-      log.p = log.p[1], ...)
+  # Check the params
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = 0)) != TRUE) { stop(msg) }
+  
+  # Vectorisation
+  xdf <- data.frame(x = q, a = a, b = b, g = g, p = NA, row.names = NULL)
+  rm(q, a, b, g)
+  
+  # Computation
+  with(xdf, inv_Tg(x, a, b, g)) %>%
+    pnorm(0, 1, lower.tail = lower.tail[1], log.p = log.p[1]) %>%
+    return()
 }
 
 
@@ -46,8 +64,19 @@ pg <- function(q, a = 0, b = 1, g = 0, lower.tail = TRUE, log.p = FALSE, ...) {
 #' @rdname distr-g
 #' @export
 qg <- function(p, a = 0, b = 1, g = 0, lower.tail = TRUE, log.p = FALSE) {
-  qgh(p = p, a = a, b = b, g = g, h = 0, lower.tail = lower.tail[1],
-      log.p = log.p[1])
+  # Check the params
+  if ((msg <- is_GHvalid(a = a, b = b, g = g, h = 0)) != TRUE) { stop(msg) }
+  
+  # Vectorisation
+  x <- data.frame(p = p, a = a, b = b, g = g, row.names = NULL)
+  rm(p, a, b, g)
+  
+  # Computation
+  out <- qnorm(x$p, 0, 1, lower.tail = lower.tail[1], log.p = log.p[1])
+  out <- Tg(out, x$a, x$b, x$g)
+  
+  # Output
+  return(out)
 }
 
 
@@ -55,7 +84,7 @@ qg <- function(p, a = 0, b = 1, g = 0, lower.tail = TRUE, log.p = FALSE) {
 #' @rdname distr-g
 #' @export
 rg <- function(n, a = 0, b = 1, g = 0) {
-  rgh(n = n, a = a, b = b, g = g, h = 0)
+  rgh(n = n, a = a[1], b = b[1], g = g[1], h = 0)
 }
 
 
@@ -71,6 +100,6 @@ infg <- function(a = 0, b = 1, g = 0) {
 #' @rdname distr-g
 #' @export
 supg <- function(a = 0, b = 1, g = 0) {
-  infgh(a = a, b = b, g = g, h = 0)
+  supgh(a = a, b = b, g = g, h = 0)
 }
 
