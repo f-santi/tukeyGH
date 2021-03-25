@@ -54,6 +54,7 @@ fitGH <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v')
   out$x <- x
   out$time <- Sys.time() - t0
   out$n <- length(x)
+  out$k <- 4
   out$df <- out$n - 4
   
   depo <- with(out,
@@ -163,6 +164,7 @@ fitGH_mle <- function(x, verbose) {
   out$estimator <- depo
   
   # Output
+  vmessage(verbose, 1, TRUE, 'Done!')
   return(out)
 }
 
@@ -215,7 +217,7 @@ print.fitGH <- function(x, ...) {
   cat('\nCall:\n')
   print(x$call)
   cat('\nPoint estimates:\n')
-  print(x$estimate)
+  print(x$estimate[1:x$k])
   
   # output
   invisible(x)
@@ -224,7 +226,7 @@ print.fitGH <- function(x, ...) {
 
 
 #' @export
-coef.fitGH <- function(object, ...) { object$estimate }
+coef.fitGH <- function(object, ...) { object$estimate[1:object$k] }
 
 
 
@@ -237,7 +239,7 @@ summary.fitGH <- function(object, ...) {
   depo <- as.matrix(object$estimate)
   colnames(depo) <- 'Estimate'
   rownames(depo) %<>% paste0('  ')
-  print(signif(depo, 4))
+  print(signif(depo[1:object$k, , drop = FALSE], 4))
   
   cat('\n',
     'Fitting method: ', object$textmethod, ', ',

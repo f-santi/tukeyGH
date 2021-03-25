@@ -28,6 +28,7 @@ fitG <- function(x, verbose = 'v') {
   out$x <- x
   out$time <- Sys.time() - t0
   out$n <- length(x)
+  out$k <- 3
   out$df <- out$n - 3
   
   depo <- with(out,
@@ -75,7 +76,7 @@ fitG_mle <- function(x, verbose) {
   out$distr <- 'g'
   out$method <- 'mle'
   out$textmethod <- 'Maxmimum likelihood'
-  out$estimate[1:3] <- c(init[1:2], depo$par)
+  out$estimate[1:4] <- c(init[1:2], depo$par, 0)
   out$estimator <- depo
   
   # Output

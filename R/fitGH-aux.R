@@ -10,6 +10,7 @@ new_fitGH <- function() {
     sd = NULL,
     vcov = NULL,
     n = 0,
+    k = NA,
     df = NA,
     x = NULL,
     estimator = NULL,
