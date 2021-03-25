@@ -21,7 +21,7 @@ inv_Tg <- function(x, a, b, g) {
   # Computation
   x <- (x - a) / b
   pos <- which(g != 0)
-  x[pos] <- log(1 + g[pos] * x[pos]) / g[pos]
+  x[pos] <- log(pmax(1 + g[pos] * x[pos], 0)) / g[pos]
   
   # Output
   return(x)
