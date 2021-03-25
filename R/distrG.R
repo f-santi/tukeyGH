@@ -32,12 +32,13 @@ dg <- function(x, a = 0, b = 1, g = 0, log = FALSE, ...) {
   # Check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = 0)) != TRUE) { stop(msg) }
   
+  fc <- ifelse(log == TRUE, `-`, `/`)
+  
   # Computation
   x %>%
     pg(a = a, b = b, g = g, log.p = log, ...) %>%
     qnorm(log.p = log) %>%
-    { stats::dnorm(.) / deriv_Tg(., b = b, g = g) } %>%
-    { `if`(log[1] == TRUE, log(.), .) } %>%
+    { fc(stats::dnorm(., log = log), deriv_Tg(., b = b, g = g, log = log)) } %>%
     return()
 }
 

@@ -61,12 +61,16 @@ dgh <- function(x, a = 0, b = 1, g = 0, h = 0.2, log = FALSE, ...) {
   # check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
+  fc <- ifelse(log == TRUE, `-`, `/`)
+  
   # compute the new x
   x %>%
-    pgh(a = a, b = b, g = g, h = h, ...) %>%
-    qnorm() %>%
-    { stats::dnorm(.) / deriv_Tgh(., b = b, g = g, h = h) } %>%
-    { `if`(log[1] == TRUE, log(.), .) } %>%
+    pgh(a = a, b = b, g = g, h = h, log.p = log, ...) %>%
+    qnorm(log.p = log) %>%
+    { fc(
+      stats::dnorm(., log = log),
+      deriv_Tgh(., b = b, g = g, h = h, log = log)
+    ) } %>%
     return()
 }
 
@@ -91,7 +95,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   
   # Settings for argument "log.p"
   if (log.p[1] == TRUE) {
-    interval <- c(-100, 0)
+    interval <- c(-2000, 0)
     bounds <- c(-Inf, 0)
   } else {
     interval <- c(0, 1)

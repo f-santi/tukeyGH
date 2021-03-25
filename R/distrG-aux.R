@@ -31,8 +31,17 @@ inv_Tg <- function(x, a, b, g) {
 
 # Derivative of g transformation
 # NOTE: all arguments must be valid and vectorised
-deriv_Tg <- function(x, b, g) {
-  return(b * exp(g * x))
+deriv_Tg <- function(x, b, g, log = FALSE) {
+  out <- g * x
+  out[g == 0] <- 0
+  
+  if (log == TRUE) {
+    out <- log(b) + out
+  } else {
+    out <- b * exp(out)
+  }
+  
+  return(out)
 }
 
 
