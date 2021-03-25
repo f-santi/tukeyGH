@@ -13,7 +13,7 @@
 #' \insertAllCited{}
 #' 
 #' @export
-testGvsGH <- function(x, nreps) {  
+testGvsGH <- function(x, nreps, verbose = 'v') {  
   
   # Initialisation
   Qest <- fitGH_hoaglin1985(x)$estimate
@@ -21,6 +21,7 @@ testGvsGH <- function(x, nreps) {
   xmin <- min(x)
   
   # Fit under Hp0 (g)
+  vmessage(verbose, 1, TRUE, 'Maximum likelihood fitting')
   depo <- optimize(
     f = function(theta, x) { loglikGH(c(0, 1, theta, 0), x) },
     interval = c(0, -1 / xmin),
@@ -32,16 +33,17 @@ testGvsGH <- function(x, nreps) {
   
   # Unrestricted fitting (g-and-h)
   depo <- optim(
-    par = c(mleG, max(Qest[4], 0)),
+    par = c(mleG, max(Qest[4], 1e-90)),
     fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
     x = x,
     method = 'L-BFGS-B',
-    lower = c(1e-10, 0),
+    lower = c(1e-10, 1e-90),
     upper = c(Inf, Inf),
     control = list(fnscale = -1)
   )
   maxGH <- depo$value 
   mleGH <- depo$par 
+  vmessage('v', 1, FALSE, 'maxGH ', maxGH, ' - maxG ', maxG)
   observed_llr <- pmax(2 * (maxGH - maxG), 0)
   
   # Simulation of the null distribution
@@ -73,13 +75,14 @@ testGvsGH <- function(x, nreps) {
       fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
       x = xsim,
       method ='L-BFGS-B',
-      lower = c(1e-10, 0),
+      lower = c(1e-10, 1e-90),
       upper = c(Inf, Inf),
       control = list(fnscale = -1)
     )
     maxGH <- depo$value 
     
     # Compute the test statistic
+    vmessage('v', 1, FALSE, 'maxGH ', maxGH, ' - maxG ', maxG)
     llr[i] <- pmax(2 * (maxGH - maxG), 0)
   }
   
