@@ -90,7 +90,7 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   
   # Function to be zeroed
   toroot <- function(p, a, b, g, h, x) {
-    return(qgh(p, a, b, g, h, log.p = log.p[1]) - x)
+    return(qgh(p, a, b, g, h, lower.tail = lower.tail[1], log.p = log.p[1]) - x)
   }
   
   # Settings for argument "log.p"
@@ -116,7 +116,6 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
         return()
     }) %>%
     unlist() %>%
-    { `if`(lower.tail[1] == TRUE, ., 1 - .) } %>%
     return()
 }
 
