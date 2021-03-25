@@ -1,8 +1,10 @@
 
-#' compute simulation-based p-value of llr
+#' Compute simulation-based *p*-value of log-likelihood ratio test
 #' 
-#' Compute simulation-based p-value of llr \insertCite{bee2021b}{tukeyGH}.
+#' Compute simulation-based *p*-value of log-likelihood ratio test
+#' \insertCite{bee2021b}{tukeyGH}.
 #' 
+#' @inheritParams fitGH
 #' @param x data.
 #' @param nreps number of replications.
 #' 
@@ -13,78 +15,50 @@
 #' \insertAllCited{}
 #' 
 #' @export
-testGvsGH <- function(x, nreps, verbose = 'v') {  
-  
+testGvsGH <- function(x, nreps, verbose = 'v') {
   # Initialisation
-  Qest <- fitGH_hoaglin1985(x)$estimate
-  x <- (x - Qest[1]) / Qest[2]
-  xmin <- min(x)
-  
-  # Fit under Hp0 (g)
-  vmessage(verbose, 1, TRUE, 'Maximum likelihood fitting')
-  depo <- optimize(
-    f = function(theta, x) { loglikGH(c(0, 1, theta, 0), x) },
-    interval = c(0, -1 / xmin),
-    x = x,
-    maximum = TRUE
-  )
-  mleG <- depo$maximum
-  maxG <- depo$objective
-  
-  # Unrestricted fitting (g-and-h)
-  depo <- optim(
-    par = c(mleG, max(Qest[4], 1e-90)),
-    fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
-    x = x,
-    method = 'L-BFGS-B',
-    lower = c(1e-10, 1e-90),
-    upper = c(Inf, Inf),
-    control = list(fnscale = -1)
-  )
-  maxGH <- depo$value 
-  mleGH <- depo$par 
-  vmessage('v', 1, FALSE, 'maxGH ', maxGH, ' - maxG ', maxG)
-  observed_llr <- pmax(2 * (maxGH - maxG), 0)
-  
-  # Simulation of the null distribution
+  t0 <- Sys.time()
   llr <- rep(0, nreps)
   
+  # Fit under Hp0 (g)
+  vmessage(verbose, 1, TRUE, 'Fitting g distribution to data')
+  depo <- fitG(x, verbose = FALSE)
+  mleG <- stats::coef(depo)[3]
+  maxG <- depo$loglik
+  
+  # Unrestricted fitting (g-and-h)
+  vmessage(verbose, 1, TRUE, 'Fitting g-and-h distribution to data')
+  depo <- fitGH(x, method = 'mle', verbose = FALSE)
+  mleGH <- stats::coef(depo)[3:4]
+  maxGH <- depo$loglik
+  observed_llr <- pmax(2 * (maxGH - maxG), 0)
+  
+  # Progress bar
+  vmessage(verbose, 1, TRUE, 'Running simulations')
+  pb <- utils::txtProgressBar(min = 0, max = nreps, style = 3)
+  
+  # Simulation of the null distribution
   for (i in seq_len(nreps)) {
-    vmessage('v', 1, TRUE, 'iterazione ', i)
     # Simulation
     xsim <- rgh(n = length(x), a = 0, b = 1, g = mleGH[1], h =0)
-    Qest <- fitGH_hoaglin1985(xsim)$estimate
-    xsim <- (xsim - Qest[1]) / Qest[2]
-    xmin <- min(xsim)
     
     # Fit under Hp0 (g)
-    depo <- optimize(
-      f = function(theta, x) { loglikGH(c(0, 1, theta, 0), x) },
-      interval = c(0, -1 / xmin),
-      x = xsim,
-      maximum = TRUE
-    )
-    maxG <- depo$objective
+    depo <- fitG(xsim, verbose = FALSE)
+    maxG <- depo$loglik
     
     # Unrestricted fitting (g-and-h)
-    vmessage('v', 1, FALSE, '          * ', depo$maximum, ' | ', Qest[4],
-      ' || ', loglikGH(c(0, 1, depo$maximum, max(Qest[4], 0)), xsim)
-    )
-    depo <- optim(
-      par = c(depo$maximum, max(Qest[4], 0)),
-      fn = function(theta, x) { loglikGH(c(0, 1, theta), x) }, 
-      x = xsim,
-      method ='L-BFGS-B',
-      lower = c(1e-10, 1e-90),
-      upper = c(Inf, Inf),
-      control = list(fnscale = -1)
-    )
-    maxGH <- depo$value 
+    depo <- fitGH(xsim, method = 'mle', verbose = FALSE)
+    maxGH <- depo$loglik
     
     # Compute the test statistic
-    vmessage('v', 1, FALSE, 'maxGH ', maxGH, ' - maxG ', maxG)
-    llr[i] <- pmax(2 * (maxGH - maxG), 0)
+    llr[i] <- 2 * (maxGH - maxG)
+    
+    # Update the progress bar
+    utils::setTxtProgressBar(pb, i)
   }
+  
+  # Close the progress bar
+  close(pb)
   
   # Output
   list(
@@ -92,7 +66,8 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
     nreps = nreps,
     statistic = observed_llr,
     llr = llr,
-    p.value = mean(llr > observed_llr)
+    p.value = mean(llr > observed_llr),
+    time = Sys.time() - t0
   ) %>%
     structure(class = 'testGvsGH') %>%
     return()
