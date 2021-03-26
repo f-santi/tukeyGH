@@ -90,24 +90,22 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   
   # Function to be zeroed
   toroot <- function(p, a, b, g, h, x) {
-    return(qgh(p, a, b, g, h, lower.tail = lower.tail[1], log.p = TRUE) - x)
+    return(qgh(p, a, b, g, h, lower.tail = lower.tail[1]) - x)
   }
   
   # Initialisations
-  interval <- c(-2000, 0)
-  bounds <- c(-Inf, 0)
-  ftrans <- ifelse(log.p == TRUE, identity, exp)
+  ftrans <- ifelse(log.p == TRUE, log, identity)
   
   # Computation
   seq_len(nrow(xdf)) %>%
     lapply(function(j) {
       uniroot.all(
-        f = toroot, interval = interval,
+        f = toroot, interval = c(0, 1),
         a = xdf$a[j], b = xdf$b[j], g = xdf$g[j], h = xdf$h[j], x = xdf$x[j],
         ...
       ) %>%
-        max(bounds[1]) %>%
-        min(bounds[2]) %>%
+        max(0) %>%
+        min(1) %>%
         return()
     }) %>%
     unlist() %>%
