@@ -15,8 +15,11 @@
 #' \insertAllCited{}
 #' 
 #' @examples 
+#' \dontrun{
+#' 
 #' data(BDSF)
 #' testGvsGH(BDSF, 30)
+#' }
 #' 
 #' @export
 testGvsGH <- function(x, nreps, verbose = 'v') {
@@ -96,7 +99,7 @@ print.testGvsGH <- function(x, ...) {
   )
   
   # Output
-  invisible(object)
+  invisible(x)
 }
 
 
