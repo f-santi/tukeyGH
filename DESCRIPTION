@@ -21,7 +21,7 @@ Description: It provides distribution, density and quantile functions of the
     Tukey's g-and-h probability distribution, as well as functions for random
     number generation, parameter fitting and testing.
 Depends: R (>= 4.0)
-Imports: magrittr (>= 2.0.0), minqa, Rdpack
+Imports: magrittr (>= 2.0.0), minqa, Rdpack, rootSolve (>= 1.8.2.1)
 Suggests: 
     testthat (>= 3.0.0)
 License: GPL (>=3)

@@ -9,6 +9,7 @@
 #'
 #' @import magrittr
 #'
+#' @importFrom rootSolve uniroot.all
 #' @importFrom stats median optim optimize pnorm qnorm quantile uniroot
 #' @importFrom utils flush.console
 #'

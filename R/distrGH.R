@@ -101,12 +101,11 @@ pgh <- function(q, a = 0, b = 1, g = 0, h = 0.2, lower.tail = TRUE,
   # Computation
   seq_len(nrow(xdf)) %>%
     lapply(function(j) {
-      suppressWarnings(uniroot(
+      uniroot.all(
         f = toroot, interval = interval,
         a = xdf$a[j], b = xdf$b[j], g = xdf$g[j], h = xdf$h[j], x = xdf$x[j],
-        extendInt = 'upX', ...
-      )) %>%
-        use_series('root') %>%
+        ...
+      ) %>%
         max(bounds[1]) %>%
         min(bounds[2]) %>%
         return()
