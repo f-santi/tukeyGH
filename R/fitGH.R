@@ -129,12 +129,16 @@ fitGH_mle <- function(x, verbose) {
   # MLE
   vmessage(verbose, 2, TRUE, 'Estimation...')
   # First try
-  vmessage(verbose, 3, TRUE, '   - trying starting from: quantile')
+  vmessage(verbose, 3, FALSE,
+    '            * trying starting from: quantile'
+  )
   out$init[3:4] <- init[3:4]
   depo <- try(fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]), silent = TRUE)
   # Second try
   if (inherits(depo, 'try-error')) {
-    vmessage(verbose, 3, TRUE, '   - trying starting from: quantile + 0.1')
+    vmessage(verbose, 3, FALSE,
+      '            * trying starting from: quantile + 0.1'
+    )
     out$init[3:4] <- init[3:4] + c(0.1, 0.1)
     depo <- try(
       fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
@@ -143,7 +147,9 @@ fitGH_mle <- function(x, verbose) {
   }
   # Third try
   if (inherits(depo, 'try-error')) {
-    vmessage(verbose, 3, TRUE, '   - trying starting from: quantile - 0.1')
+    vmessage(verbose, 3, FALSE,
+      '            * trying starting from: quantile - 0.1'
+    )
     out$init[3:4] <- init[3:4] - c(0.1, 0.1)
     depo <- try(
       fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
