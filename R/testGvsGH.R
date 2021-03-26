@@ -14,6 +14,10 @@
 #' @references
 #' \insertAllCited{}
 #' 
+#' @examples 
+#' data(BDSF)
+#' testGvsGH(BDSF, 30)
+#' 
 #' @export
 testGvsGH <- function(x, nreps, verbose = 'v') {
   # Initialisation
@@ -62,6 +66,7 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
   
   # Output
   list(
+    call = match.call(),
     n = length(x),
     nreps = nreps,
     statistic = observed_llr,
@@ -72,3 +77,32 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
     structure(class = 'testGvsGH') %>%
     return()
 }
+
+
+
+#' @export
+print.testGvsGH <- function(x, ...) {
+  cat("\ng vs Tukey's g-and-h distribution test\n")
+  cat('\nCall:\n')
+  print(x$call)
+  cat('\nStatistic: ', x$statistic, ', Estimated p-value: ', x$p.value,'\n\n')
+  cat('\nSummary statistics of the simulated log-likelihood ratios:\n')
+  print(summary(x$llr))
+  
+  cat('\n',
+    'Fitting method: Maximum Likelihood, ',
+    'Computation time: ', signif(x$time, 3), ' ', units(x$time), '\n',
+    'Observations: ', x$n, ', degrees of freedom: ', 1, '\n', sep = ''
+  )
+  
+  # Output
+  invisible(object)
+}
+
+
+
+#' @export
+summary.testGvsGH <- function(object, ...) {
+  print(object, ...)
+}
+
