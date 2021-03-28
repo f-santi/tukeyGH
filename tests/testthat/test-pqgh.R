@@ -21,7 +21,7 @@ test_that("qgh and pgh work consistently", {
   p0 <- log(runif(100))
   q0 <- with(depo, qgh(p = p0, a = a, b = b, g = g, h = h, log.p = TRUE))
   p1 <- with(depo, 
-    pgh(q = q0, a = a, b = b, g = g, h = h, log.p = TRUE, tol = 1e-7)
+    pgh(q = q0, a = a, b = b, g = g, h = h, log.p = TRUE, tol = 1e-9)
   )
-  expect_true(all(abs(p0 - p1) < 1e-5))
+  expect_true(all(abs(p0 - p1) < 1e-6))
 })
