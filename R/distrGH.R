@@ -37,7 +37,7 @@
 #'   accepted (see *Details*).
 #' @param a location parameter(s).
 #' @param b scale parameter(s).
-#' @param ... arguments passed to `uniroot`.
+#' @param ... arguments passed to [rootSolve::uniroot.all()].
 #' @param x,q vector of quantiles.
 #' @param log,log.p logical; if TRUE, probabilities p are given as log(p).
 #' 
