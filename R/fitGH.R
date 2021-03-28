@@ -83,11 +83,10 @@ fitGH_iinference <- function(x) {
     pmax(c(-Inf, -Inf, 0.1, 0.5)) -> init
   
   # Computing pseudo MLes
-  optim(
-    par = c(0.1, 0.5),
-    fn = function(theta, x) { loglikST(c(init[1:2], theta), x) },
-    x = x,
-    control = list(fnscale = -1)
+  stats::nlm(
+    f = function(theta, x) { -loglikST(c(init[1:2], exp(theta)), x) },
+    p = log(init[3:4]),
+    x = x
   ) -> depoH
   
   # W
@@ -99,7 +98,7 @@ fitGH_iinference <- function(x) {
     lower = c(-Inf, 0),
     upper = c(Inf, Inf),
     control = list(iprint = 0, maxfun = 600),
-    parmt = depoH$par, W = W, nsim = 5000
+    parmt = exp(depoH$estimate), W = W, nsim = 5000
   ) -> depo
   
   # Prepare the output

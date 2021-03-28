@@ -51,14 +51,13 @@ XiBoot <- function(x, nboot, init) {
     # Quantile estimator
     Qest <- fitGH_hoaglin1985(x)$estimate
     # Pseudo MLE
-    optim(
-      par = init,
-      fn = function(theta, x) { loglikST(c(0, 1, theta), x) },
-      x = (xboot - Qest[1]) / Qest[2],
-      control = list(fnscale = -1)
+    stats::nlm(
+      f = function(theta, x) { -loglikST(c(0, 1, exp(theta)), x) },
+      p = log(init),
+      x = (xboot - Qest[1]) / Qest[2]
     ) -> depo
     # Results
-    out[i, ] <- depo$par
+    out[i, ] <- exp(depo$estimate)
   }
   
   # Output
@@ -69,23 +68,18 @@ XiBoot <- function(x, nboot, init) {
 
 # 
 iinferenceGH_ST <- function(x, parmt, W, nsim) {
-  # simulation
+  # Simulation
   xsim <- rgh(n = nsim, a = 0, b =  1, g = x[1], h = x[2])
   
-  # optimisation
-  hatPsi <- optim(
-    par = c(0.1, 0.5),
-    fn = function(theta, x) { loglikST(c(0, 1, theta), x) },
-    x = xsim,
-    method = "L-BFGS-B",
-    lower = c(-Inf, 0),
-    upper = c(Inf, Inf),
-    control = list(fnscale = -1)
-  )
+  # Optimisation
+  stats::nlm(
+    f = function(theta, x) { -loglikST(c(0, 1, exp(theta)), x) },
+    p = log(c(0.1, 0.5)),
+    x = xsim
+  ) -> hatPsi
   
-  # estimation
-  hatPsi %>%
-    use_series('par') %>%
+  # Estimation
+  exp(hatPsi$estimate) %>%
     { t(parmt - .) %*% W %*% (parmt - .) } %>%
     as.vector() %>%
     return()

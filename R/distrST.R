@@ -23,6 +23,7 @@ dst <- function (x, a = 0, b = 1, skew = 1, df = 10, log = FALSE) {
 loglikST <- function(theta, x) {
   dst(x, a = theta[1], b = theta[2], skew = theta[3], df = theta[4], log = TRUE) %>%
     sum() %>%
+    max(-.Machine$double.xmax, na.rm = TRUE) %>%
     return()
 }
 
