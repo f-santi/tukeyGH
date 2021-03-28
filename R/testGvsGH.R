@@ -6,7 +6,7 @@
 #' 
 #' @inheritParams fitGH
 #' @param x data.
-#' @param nreps number of replications.
+#' @param nsim number of Monte Carlo simulations
 #' 
 #' @return
 #' Object of class `testGvsGH`.
@@ -22,10 +22,10 @@
 #' }
 #' 
 #' @export
-testGvsGH <- function(x, nreps, verbose = 'v') {
+testGvsGH <- function(x, nsim, verbose = 'v') {
   # Initialisation
   t0 <- Sys.time()
-  llr <- rep(0, nreps)
+  LLR <- rep(0, nsim)
   
   # Fit under Hp0 (g)
   vmessage(verbose, 1, TRUE, 'Fitting g distribution to data')
@@ -38,14 +38,14 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
   depo <- fitGH(x, method = 'mle', verbose = FALSE)
   mleGH <- stats::coef(depo)[3:4]
   maxGH <- depo$loglik
-  observed_llr <- pmax(2 * (maxGH - maxG), 0)
+  observed_LLR <- pmax(2 * (maxGH - maxG), 0)
   
   # Progress bar
   vmessage(verbose, 1, TRUE, 'Running simulations')
-  pb <- utils::txtProgressBar(min = 0, max = nreps, style = 3)
+  pb <- utils::txtProgressBar(min = 0, max = nsim, style = 3)
   
   # Simulation of the null distribution
-  for (i in seq_len(nreps)) {
+  for (i in seq_len(nsim)) {
     # Simulation
     xsim <- rgh(n = length(x), a = 0, b = 1, g = mleGH[1], h =0)
     
@@ -58,7 +58,7 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
     maxGH <- depo$loglik
     
     # Compute the test statistic
-    llr[i] <- 2 * (maxGH - maxG)
+    LLR[i] <- 2 * (maxGH - maxG)
     
     # Update the progress bar
     utils::setTxtProgressBar(pb, i)
@@ -71,10 +71,13 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
   list(
     call = match.call(),
     n = length(x),
-    nreps = nreps,
-    statistic = observed_llr,
-    llr = llr,
-    p.value = mean(llr > observed_llr),
+    nsim = nsim,
+    statistic = observed_LLR,
+    LLR = LLR,
+    p.value = mean(LLR > observed_LLR),
+    CIp.value = suppressWarnings(
+      stats::prop.test(sum(LLR > observed_LLR), nsim)$conf.int
+    ),
     time = Sys.time() - t0
   ) %>%
     structure(class = 'testGvsGH') %>%
@@ -85,15 +88,18 @@ testGvsGH <- function(x, nreps, verbose = 'v') {
 
 #' @export
 print.testGvsGH <- function(x, ...) {
-  cat("\ng vs Tukey's g-and-h distribution test\n")
+  cat("\nSimulated LLR of g vs Tukey's g-and-h distribution test\n")
   cat('\nCall:\n')
   print(x$call)
-  cat('\nStatistic: ', x$statistic, ', Estimated p-value: ', x$p.value,'\n\n')
+  cat('\nStatistic: ', x$statistic, ', Estimated p-value: ', x$p.value, sep = '')
+  cat('\nApproximate 95% C.I. of p-value: ')
+  cat('(', paste0(signif(x$CIp.value, 4), collapse = ', '), ')', '\n', sep = '')
   cat('\nSummary statistics of the simulated log-likelihood ratios:\n')
-  print(summary(x$llr))
+  print(summary(x$LLR))
   
   cat('\n',
-    'Fitting method: Maximum Likelihood, ',
+    'Fitting method: Maximum Likelihood\n',
+    'Number of simulations: ', x$nsim, ', ',
     'Computation time: ', signif(x$time, 3), ' ', units(x$time), '\n',
     'Observations: ', x$n, ', degrees of freedom: ', 1, '\n', sep = ''
   )
