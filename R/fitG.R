@@ -63,7 +63,7 @@ fitG_mle <- function(x, verbose) {
   
   # MLE
   vmessage(verbose, 2, TRUE, 'Estimation...')
-  depo <-  stats::nlm(
+  depo <-  nlm(
     f = function(theta, xdata) { -loglikG(c(0, 1, theta), xdata) },
     p = mean(c(1 / max(xst), -1 / min(xst))),
     xdata = xst

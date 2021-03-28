@@ -30,7 +30,7 @@ fitGH_mle_sub2 <- function(init, x) {
   # Checks on starting values
   if ((msg <- is_GHvalid(g = init[1], h = exp(init[2]))) != TRUE) { stop(msg) }
   
-  stats::nlm(
+  nlm(
     f = function(theta, xdata) { -loglikGH(c(0, 1, theta[1], exp(theta[2])), xdata) },
     p = init,
     xdata = x
@@ -51,7 +51,7 @@ XiBoot <- function(x, nboot, init) {
     # Quantile estimator
     Qest <- fitGH_hoaglin1985(x)$estimate
     # Pseudo MLE
-    stats::nlm(
+    nlm(
       f = function(theta, x) { -loglikST(c(0, 1, exp(theta)), x) },
       p = log(init),
       x = (xboot - Qest[1]) / Qest[2]
@@ -72,7 +72,7 @@ iinferenceGH_ST <- function(x, parmt, W, nsim) {
   xsim <- rgh(n = nsim, a = 0, b =  1, g = x[1], h = x[2])
   
   # Optimisation
-  stats::nlm(
+  nlm(
     f = function(theta, x) { -loglikST(c(0, 1, exp(theta)), x) },
     p = log(c(0.1, 0.5)),
     x = xsim

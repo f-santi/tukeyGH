@@ -83,7 +83,7 @@ fitGH_iinference <- function(x) {
     pmax(c(-Inf, -Inf, 0.1, 0.5)) -> init
   
   # Computing pseudo MLes
-  stats::nlm(
+  nlm(
     f = function(theta, x) { -loglikST(c(init[1:2], exp(theta)), x) },
     p = log(init[3:4]),
     x = x
