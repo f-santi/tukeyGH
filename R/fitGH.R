@@ -132,16 +132,21 @@ fitGH_mle <- function(x, verbose) {
   vmessage(verbose, 3, FALSE,
     '            * trying starting from: quantile'
   )
-  out$init[3:4] <- init[3:4]
-  depo <- try(fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]), silent = TRUE)
+  out$init[3:4] <- pmax(init[3:4], c(-Inf, 0.1))
+  depo <- try(fitGH_mle_sub2(
+    init = c(out$init[3], log(out$init[4])),
+    x = (x - init[1]) / init[2]
+    ),
+    silent = TRUE
+  )
   # Second try
   if (inherits(depo, 'try-error')) {
     vmessage(verbose, 3, FALSE,
       '            * trying starting from: quantile + 0.1'
     )
-    out$init[3:4] <- init[3:4] + c(0.1, 0.1)
+    out$init[3:4] <- pmax(init[3:4] + c(0.1, 0.1), c(-Inf, 0.1))
     depo <- try(
-      fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      fitGH_mle_sub2(c(out$init[3], log(out$init[4])), (x - init[1]) / init[2]),
       silent = TRUE
     )
   }
@@ -150,9 +155,9 @@ fitGH_mle <- function(x, verbose) {
     vmessage(verbose, 3, FALSE,
       '            * trying starting from: quantile - 0.1'
     )
-    out$init[3:4] <- init[3:4] - c(0.1, 0.1)
+    out$init[3:4] <- pmax(init[3:4] - c(0.1, 0.1), c(-Inf, 0.1))
     depo <- try(
-      fitGH_mle_sub2(out$init[3:4], (x - init[1]) / init[2]),
+      fitGH_mle_sub2(c(out$init[3], log(out$init[4])), (x - init[1]) / init[2]),
       silent = TRUE
     )
   }
@@ -166,7 +171,7 @@ fitGH_mle <- function(x, verbose) {
   out$distr <- 'g-and-h'
   out$method <- 'mle'
   out$textmethod <- 'Maxmimum likelihood'
-  out$estimate[1:4] <- c(init[1:2], depo$par)
+  out$estimate[1:4] <- c(init[1:2], depo$estimate[1], exp(depo$estimate[2]))
   out$estimator <- depo
   
   # Output

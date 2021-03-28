@@ -85,6 +85,7 @@ deriv_Tgh <- function(x, b, g, h, log = FALSE) {
 loglikGH <- function(theta, x) {
   dgh(x, a = theta[1], b = theta[2], g = theta[3], h = theta[4], log = TRUE) %>%
     sum() %>%
+    max(-.Machine$double.xmax, na.rm = TRUE) %>%
     return()
 } 
 

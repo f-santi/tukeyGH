@@ -63,12 +63,10 @@ fitG_mle <- function(x, verbose) {
   
   # MLE
   vmessage(verbose, 2, TRUE, 'Estimation...')
-  depo <- optim(
-    par = mean(c(1 / max(xst), -1 / min(xst))),
-    fn = function(theta, xdata) { loglikG(c(0, 1, theta), xdata) },
-    xdata = xst,
-    method = 'SANN',
-    control = list(fnscale = -1)
+  depo <-  stats::nlm(
+    f = function(theta, xdata) { -loglikG(c(0, 1, theta), xdata) },
+    p = mean(c(1 / max(xst), -1 / min(xst))),
+    xdata = xst
   )
   
   # Prepare the output
@@ -76,7 +74,7 @@ fitG_mle <- function(x, verbose) {
   out$distr <- 'g'
   out$method <- 'mle'
   out$textmethod <- 'Maxmimum likelihood'
-  out$estimate[1:4] <- c(init[1:2], depo$par, 0)
+  out$estimate[1:4] <- c(init[1:2], depo$estimate, 0)
   out$estimator <- depo
   
   # Output

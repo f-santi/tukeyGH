@@ -28,16 +28,12 @@ new_fitGH <- function() {
 
 fitGH_mle_sub2 <- function(init, x) {
   # Checks on starting values
-  if ((msg <- is_GHvalid(g = init[1], h = init[2])) != TRUE) { stop(msg) }
+  if ((msg <- is_GHvalid(g = init[1], h = exp(init[2]))) != TRUE) { stop(msg) }
   
-  # Estimation
-  optim(
-    par = init,
-    fn = function(theta, xdata) { loglikGH(c(0, 1, theta), xdata) },
-    xdata = x,
-    method = 'L-BFGS-B',
-    lower = c(-Inf, 0),
-    control = list(fnscale = -1)
+  stats::nlm(
+    f = function(theta, xdata) { -loglikGH(c(0, 1, theta[1], exp(theta[2])), xdata) },
+    p = init,
+    xdata = x
   )
 }
 

@@ -50,6 +50,7 @@ deriv_Tg <- function(x, b, g, log = FALSE) {
 loglikG <- function(theta, x) {
   dg(x, a = theta[1], b = theta[2], g = theta[3], log = TRUE) %>%
     sum() %>%
+    max(-.Machine$double.xmax, na.rm = TRUE) %>%
     return()
 } 
 
