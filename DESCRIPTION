@@ -1,7 +1,7 @@
 Package: tukeyGH
 Type: Package
 Title: Tukey's g-and-h probability distribution
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: c(
     person('Flavio', 'Santi', email = 'flavio.santi@univr.it',
       role = c('cre', 'aut'), comment = c(ORCID = "0000-0002-2014-1981")),
