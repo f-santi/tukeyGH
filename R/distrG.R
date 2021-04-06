@@ -34,11 +34,17 @@ dg <- function(x, a = 0, b = 1, g = 0, log = FALSE, ...) {
   
   fc <- ifelse(log == TRUE, `-`, `/`)
   
+  # Vectorisation
+  X <- data.frame(x = x, a = a, b = b, g = g, row.names = NULL)
+  rm(x, a, b, g)
+  
   # Computation
-  x %>%
-    pg(a = a, b = b, g = g, log.p = log, ...) %>%
+  with(X, pg(q = x, a = a, b = b, g = g, log.p = log, ...)) %>%
     qnorm(log.p = log) %>%
-    { fc(stats::dnorm(., log = log), deriv_Tg(., b = b, g = g, log = log)) } %>%
+    { fc(
+      stats::dnorm(., log = log),
+      with(X, deriv_Tg(., b = b, g = g, log = log))
+    ) } %>%
     return()
 }
 
