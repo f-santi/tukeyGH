@@ -1,0 +1,60 @@
+---
+output: github_document
+bibliography: inst/REFERENCES.bib
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-",
+  eval = FALSE
+)
+```
+
+
+
+# Tukey's g-and-h probability distribution
+
+
+## Presentation
+
+The package provides distribution, density and quantile functions of the Tukey's
+g-and-h probability distribution [@tukey1977], as well as functions for random
+number generation, parameter estimation and testing.
+
+In the current version of the package, the g-and-h distribution can be fitted
+through:
+
+* indirect inference [@bee2019a]
+* the quantile estimator [@hoaglin1985]
+* maximum likelihood [@bee2019b]
+
+whereas the hypothesis $h=0$ (which makes the g-and-h distribution, a g
+distribution) is tested by means of the log-likelihood ratio test procedure
+proposed in @bee2021b.
+
+
+
+## An example
+
+Fit the g-and-h distribution to dataset `BDSF` on operational losses by means
+of indirect inference [@bee2019a], and quantile estimator [@hoaglin1985]:
+```{r}
+library(tukeyGH)
+data("BDSF")
+
+modII <- fitGH(BDSF, method = "iinference")
+summary(modII)
+
+modQu <- fitGH(BDSF, method = "quantile")
+summary(modQu)
+```
+
+
+
+## References
+
+
