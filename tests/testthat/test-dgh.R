@@ -11,6 +11,19 @@ test_that("dgh works", {
   
   expect_true(all(depo >= 0))
   
+  # Derivative
+  dx <- 1e-8
+  depo <- gen_GHvalid(200)
+  depo$x <- with(depo,
+    mapply(rgh, a = a, b = b, g = g, h = h, MoreArgs = list(n = 1))
+  )
+  depo$fx <- with(depo, dgh(x, a, b, g, h))
+  depo$Fxl <- with(depo, pgh(x - 0.5 * dx, a, b, g, h, tol = 1e-12))
+  depo$Fxr <- with(depo, pgh(x + 0.5 * dx, a, b, g, h, tol = 1e-12))
+  depo$afx <- with(depo, (Fxr - Fxl) / dx)
+  
+  expect_equal(depo$fx, depo$afx, tolerance = 1e-3)
+  
   # Cfr. with Gaussian
   depo <- gen_GHvalid(100, g = 0, h = 0)
   depox <- rnorm(100, depo$a, depo$b)
