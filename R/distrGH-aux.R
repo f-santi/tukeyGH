@@ -54,24 +54,29 @@ Tgh <- function(z, a, b, g, h) {
 # Derivative of gh transformation
 # NOTE: all arguments must be valid and vectorised
 deriv_Tgh <- function(x, b, g, h, log = FALSE) {
+  # g == 0
   posg0 <- which(g == 0)
   posgN <- which(g != 0)
+  # g
   gZ <- g * x
   gZ[posg0] <- 0
+  #h
   hZ2 <- h * x^2
   hZ2[h == 0] <- 0
   
   if (log == TRUE) {
     out <- log(b) + hZ2 / 2
     out[posg0] %<>% add(log(1 + hZ2[posg0]))
-    out[posgN] %<>% add(log(
-      exp(gZ[posgN]) + (exp(gZ[posgN]) - 1) / g[posgN] * h[posgN] * x[posgN]
-    ))
+    out[posgN] %<>% add(
+      -log(g[posgN]) + gZ +
+      log(g[posgN] + (1 - exp(-gZ[posgN])) * h[posgN] * x[posgN])
+    )
   } else {
     out <- b * exp(hZ2 / 2)
     out[posg0] %<>% multiply_by(1 + hZ2[posg0])
     out[posgN] %<>% multiply_by(
-      (exp(gZ[posgN]) + (exp(gZ[posgN]) - 1) / g[posgN] * h[posgN] * x[posgN])
+      exp(gZ[posgN]) / g[posgN] * 
+      (g[posgN] + (1 - exp(-gZ[posgN])) * h[posgN] * x[posgN])
     )
   }
   
