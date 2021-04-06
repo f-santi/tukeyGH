@@ -22,27 +22,29 @@
 #' }
 #' 
 #' @export
-testGvsGH <- function(x, nsim, verbose = 'v') {
+testGvsGH <- function(x, nsim, verbose = 'vv') {
   # Initialisation
   t0 <- Sys.time()
   LLR <- rep(0, nsim)
   
   # Fit under Hp0 (g)
-  vmessage(verbose, 1, TRUE, 'Fitting g distribution to data')
+  vmessage(verbose, 2, TRUE, 'Fitting g distribution to data')
   depo <- fitG(x, verbose = FALSE)
   mleG <- stats::coef(depo)[3]
   maxG <- depo$loglik
   
   # Unrestricted fitting (g-and-h)
-  vmessage(verbose, 1, TRUE, 'Fitting g-and-h distribution to data')
+  vmessage(verbose, 2, TRUE, 'Fitting g-and-h distribution to data')
   depo <- fitGH(x, method = 'mle', verbose = FALSE)
   mleGH <- stats::coef(depo)[3:4]
   maxGH <- depo$loglik
   observed_LLR <- pmax(2 * (maxGH - maxG), 0)
   
   # Progress bar
-  vmessage(verbose, 1, TRUE, 'Running simulations')
-  pb <- utils::txtProgressBar(min = 0, max = nsim, style = 3)
+  vmessage(verbose, 2, TRUE, 'Running simulations')
+  if (verbose %in% c('v', 'vv', 'vvv')) {
+    pb <- utils::txtProgressBar(min = 0, max = nsim, style = 3)
+  }
   
   # Simulation of the null distribution
   for (i in seq_len(nsim)) {
@@ -61,11 +63,12 @@ testGvsGH <- function(x, nsim, verbose = 'v') {
     LLR[i] <- 2 * (maxGH - maxG)
     
     # Update the progress bar
-    utils::setTxtProgressBar(pb, i)
+    if (verbose %in% c('v', 'vv', 'vvv')) { utils::setTxtProgressBar(pb, i) }
   }
   
   # Close the progress bar
-  close(pb)
+  if (verbose %in% c('v', 'vv', 'vvv')) { close(pb) }
+  vmessage(verbose, 2, TRUE, 'Done!')
   
   # Output
   list(
