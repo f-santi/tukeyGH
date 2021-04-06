@@ -58,18 +58,21 @@
 #' 
 #' @export
 dgh <- function(x, a = 0, b = 1, g = 0, h = 0.2, log = FALSE, ...) {
-  # check the params
+  # Check the params
   if ((msg <- is_GHvalid(a = a, b = b, g = g, h = h)) != TRUE) { stop(msg) }
   
   fc <- ifelse(log == TRUE, `-`, `/`)
   
-  # compute the new x
-  x %>%
-    pgh(a = a, b = b, g = g, h = h, log.p = log, ...) %>%
+  # Vectorisation
+  X <- data.frame(x = x, a = a, b = b, g = g, h = h, row.names = NULL)
+  rm(x, a, b, g, h)
+  
+  # Compute the new x
+  with(X, pgh(q = x, a = a, b = b, g = g, h = h, log.p = log, ...)) %>%
     qnorm(log.p = log) %>%
     { fc(
       stats::dnorm(., log = log),
-      deriv_Tgh(., b = b, g = g, h = h, log = log)
+      with(X, deriv_Tgh(., b = b, g = g, h = h, log = log))
     ) } %>%
     return()
 }
