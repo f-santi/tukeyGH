@@ -41,7 +41,9 @@
 #' }
 #' 
 #' @export
-fitGH <- function(x, method = c("iinference", "quantile", "mle"), verbose = 'v') {
+fitGH <- function(x, method = c("iinference", "quantile", "mle"),
+  verbose = 'vv') {
+
   t0 <- Sys.time()
   
   switch(match.arg(method),
