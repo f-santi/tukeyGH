@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 
 
-# Tukey's g-and-h probability distribution
+# Tukey's g-and-h Probability Distribution
 
 
 ## Presentation

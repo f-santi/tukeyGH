@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# Tukey’s g-and-h probability distribution
+# Tukey’s g-and-h Probability Distribution
 
 ## Presentation
 
