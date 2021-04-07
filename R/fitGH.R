@@ -23,20 +23,20 @@
 #' \insertAllCited{}
 #' 
 #' @examples 
-#' data("BDSF")
+#' data("EPWS2014")
 #' 
-#' # Fit to BDSF data through indirect inference
-#' modII <- fitGH(BDSF)
+#' # Fit to EPWS2014 data through indirect inference
+#' modII <- fitGH(EPWS2014)
 #' summary(modII)
 #' 
-#' # Fit to BDSF data through the quantile estimator
-#' modQ <- fitGH(BDSF, method = "quantile")
+#' # Fit to EPWS2014 data through the quantile estimator
+#' modQ <- fitGH(EPWS2014, method = "quantile")
 #' summary(modQ)
 #' 
 #' \dontrun{
 #' 
-#' # Fit to BDSF data through MLE (the computation time is much longer)
-#' modMLE <- fitGH(BDSF, method = "mle")
+#' # Fit to EPWS2014 data through MLE (the computation time is much longer)
+#' modMLE <- fitGH(EPWS2014, method = "mle")
 #' summary(modMLE)
 #' }
 #' 

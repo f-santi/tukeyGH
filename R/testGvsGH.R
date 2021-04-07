@@ -17,8 +17,8 @@
 #' @examples 
 #' \dontrun{
 #' 
-#' data(BDSF)
-#' testGvsGH(BDSF, 30)
+#' data(EPWS2014)
+#' testGvsGH(EPWS2014, 30)
 #' }
 #' 
 #' @export

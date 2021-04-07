@@ -12,10 +12,10 @@
 #' \insertAllCited{}
 #' 
 #' @examples 
-#' data("BDSF")
+#' data("EPWS2014")
 #' 
-#' # Fit to BDSF data
-#' modG <- fitG(BDSF)
+#' # Fit to EPWS2014 data
+#' modG <- fitG(EPWS2014)
 #' summary(modG)
 #' 
 #' @export

@@ -20,8 +20,8 @@
 #' * `qqplot`: output of function [qqplot()]
 #' 
 #' @examples
-#' data("BDSF")
-#' modII <- fitGH(BDSF)
+#' data("EPWS2014")
+#' modII <- fitGH(EPWS2014)
 #' qqgh(modII)
 #' 
 #' @export
