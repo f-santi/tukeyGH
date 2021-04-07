@@ -68,8 +68,7 @@ deriv_Tgh <- function(x, b, g, h, log = FALSE) {
     out <- log(b) + hZ2 / 2
     out[posg0] %<>% add(log(1 + hZ2[posg0]))
     out[posgN] %<>% add(
-      -log(g[posgN]) + gZ +
-      log(g[posgN] + (1 - exp(-gZ[posgN])) * h[posgN] * x[posgN])
+      gZ + log(1 + (1 - exp(-gZ[posgN])) / g[posgN] * h[posgN] * x[posgN])
     )
   } else {
     out <- b * exp(hZ2 / 2)
