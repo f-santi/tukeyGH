@@ -40,17 +40,22 @@ proposed in @bee2021b.
 
 ## An example
 
-Fit the g-and-h distribution to dataset `BDSF` on operational losses by means
-of indirect inference [@bee2019a], and quantile estimator [@hoaglin1985]:
+Fit the g-and-h distribution to dataset `EPWS2014` on operational losses by
+means of indirect inference [@bee2019a], and quantile estimator [@hoaglin1985]:
 ```{r}
 library(tukeyGH)
-data("BDSF")
+data("EPWS2014")
 
-modII <- fitGH(BDSF, method = "iinference")
+modII <- fitGH(EPWS2014, method = "iinference")
 summary(modII)
 
-modQu <- fitGH(BDSF, method = "quantile")
-summary(modQu)
+modQU <- fitGH(EPWS2014, method = "quantile")
+summary(modQU)
+
+modML <- fitGH(EPWS2014, method = "mle")
+summary(modML)
+
+rbind(QU = coef(modQU), II = coef(modII), ML = coef(modML))
 ```
 
 

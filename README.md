@@ -23,18 +23,18 @@ procedure proposed in Bee et al. (2021).
 
 ## An example
 
-Fit the g-and-h distribution to dataset `BDSF` on operational losses by
-means of indirect inference (Bee, Hambuckers, and Trapin 2019b), and
+Fit the g-and-h distribution to dataset `EPWS2014` on operational losses
+by means of indirect inference (Bee, Hambuckers, and Trapin 2019b), and
 quantile estimator (Hoaglin 1985):
 
 ``` r
 library(tukeyGH)
-data("BDSF")
+data("EPWS2014")
 
-modII <- fitGH(BDSF, method = "iinference")
+modII <- fitGH(EPWS2014, method = "iinference")
 summary(modII)
 
-modQu <- fitGH(BDSF, method = "quantile")
+modQu <- fitGH(EPWS2014, method = "quantile")
 summary(modQu)
 ```
 
