@@ -94,7 +94,7 @@ print.testGvsGH <- function(x, ...) {
   cat("\nSimulated LLR of g vs Tukey's g-and-h distribution test\n")
   cat('\nCall:\n')
   print(x$call)
-  cat('\nStatistic: ', x$statistic, ', Estimated p-value: ', x$p.value, sep = '')
+  cat('\nStatistic: ', x$statistic, ', Estimated p-value: ', x$p.value,sep = '')
   cat('\nApproximate 95% C.I. of p-value: ')
   cat('(', paste0(signif(x$CIp.value, 4), collapse = ', '), ')', '\n', sep = '')
   cat('\nSummary statistics of the simulated log-likelihood ratios:\n')

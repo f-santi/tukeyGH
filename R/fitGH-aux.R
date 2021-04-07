@@ -31,7 +31,9 @@ fitGH_mle_sub2 <- function(init, x) {
   if ((msg <- is_GHvalid(g = init[1], h = exp(init[2]))) != TRUE) { stop(msg) }
   
   nlm(
-    f = function(theta, xdata) { -loglikGH(c(0, 1, theta[1], exp(theta[2])), xdata) },
+    f = function(theta, xdata) {
+      -loglikGH(c(0, 1, theta[1], exp(theta[2])), xdata)
+    },
     p = init,
     xdata = x
   )
