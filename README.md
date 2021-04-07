@@ -34,8 +34,13 @@ data("EPWS2014")
 modII <- fitGH(EPWS2014, method = "iinference")
 summary(modII)
 
-modQu <- fitGH(EPWS2014, method = "quantile")
-summary(modQu)
+modQU <- fitGH(EPWS2014, method = "quantile")
+summary(modQU)
+
+modML <- fitGH(EPWS2014, method = "mle")
+summary(modML)
+
+rbind(QU = coef(modQU), II = coef(modII), ML = coef(modML))
 ```
 
 ## References
@@ -57,7 +62,6 @@ Bee, M., J. Hambuckers, and L. Trapin. 2019a. “An Improved Approach for
 Estimating Large Losses in Insurance Analytics and Operational Risk
 Using the G-and-H Distribution.” DEM Working papers 2019/11. Department
 of Economics; Management, University of Trento.
-<https://bit.ly/3cbccu2>.
 
 </div>
 
