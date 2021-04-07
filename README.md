@@ -61,7 +61,7 @@ Simulated Approach.” *Computational Statistics*.
 Bee, M., J. Hambuckers, and L. Trapin. 2019a. “An Improved Approach for
 Estimating Large Losses in Insurance Analytics and Operational Risk
 Using the G-and-H Distribution.” DEM Working papers 2019/11. Department
-of Economics; Management, University of Trento.
+of Economics and Management, University of Trento.
 
 </div>
 
