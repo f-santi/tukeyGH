@@ -18,6 +18,7 @@
 #' \dontrun{
 #' 
 #' data(EPWS2014)
+#' # Warning: the following code may take up to 30 mins to be run
 #' testGvsGH(EPWS2014, 30)
 #' }
 #' 
