@@ -8,6 +8,8 @@ test_that("transformation g and its inverse are consistent", {
   depo$errTit   <- with(depo, abs(x - invTgx))
   depo$erriTT   <- with(depo, abs(Tgx - TginvTgx))
   
+  depo <- depo[!is.infinite(depo$Tgx), ]
+  
   expect_true(all(depo$errTiT < 1e-9))
   expect_true(all(depo$erriTT < 1e-9))
 })
