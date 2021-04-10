@@ -1,7 +1,7 @@
 Package: tukeyGH
 Type: Package
 Title: Tukey's g-and-h Probability Distribution
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
     person('Flavio', 'Santi', email = 'flavio.santi@univr.it',
       role = c('cre', 'aut'), comment = c(ORCID = "0000-0002-2014-1981")),
@@ -16,7 +16,7 @@ Author: Flavio Santi [cre, aut] (<https://orcid.org/0000-0002-2014-1981>),
     Julien Hambuckers [aut] (<https://orcid.org/0000-0003-4567-5477>),
     Luca Trapin [aut] (<https://orcid.org/0000-0001-8613-0962>)
 Maintainer: Flavio Santi <flavio.santi@univr.it>
-URL: https://github.com/f-santi/tukeyGH
+URL: https://www.flaviosanti.it/software/tukeyGH
 BugReports: https://github.com/f-santi/tukeyGH/issues
 Description: It provides distribution, density and quantile functions of the
     Tukey's g-and-h probability distribution, as well as functions for random
